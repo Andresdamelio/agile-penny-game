@@ -2,7 +2,7 @@
     <footer class="container-fluid custom-footer fixed-bottom">
         <div class="row">
             <div class="col">
-                FOOTER
+                4Agile - 2020
             </div>
         </div>
     </footer>
@@ -16,7 +16,9 @@
 
 <style scoped lang="scss">
     .custom-footer {
-        background-color: black;
-        height: $footer-height;
+        text-align: center;
+        padding: 1rem;
+        background: #ffffff;
+        border-top: 1px solid #ccc;
     }
 </style>

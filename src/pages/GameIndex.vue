@@ -45,6 +45,7 @@
 
 <style scoped lang="scss">
     .custom-body {
+        background: #fffbef;
         height: 100%;
         overflow: auto;
         padding-top: $header-height + $header1-height;

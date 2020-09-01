@@ -1,14 +1,13 @@
 <template>
   <div id="app">
     <Header></Header>
-    <router-view></router-view>
-    <!-- <game-index></game-index> -->
+    <game-index></game-index>
     <Footer></Footer>
   </div>
 </template>
 
 <script>
-// import GameIndex from "./pages/GameIndex";
+import GameIndex from "./pages/GameIndex";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 
@@ -17,7 +16,7 @@ export default {
   components: {
     Footer,
     Header,
-    // GameIndex,
+    GameIndex,
   }
 }
 </script>
