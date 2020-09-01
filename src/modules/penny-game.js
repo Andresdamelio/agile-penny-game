@@ -10,8 +10,8 @@ const pennyModule = {
   },
   getters: {},
   actions: {
-    socket_new_room: ({ rootState }) => {
-      rootState.io.emit("newRoom");
+    socket_new_room: ({ rootState }, numberOfPlayers) => {
+      rootState.io.emit("newRoom", numberOfPlayers);
     },
   },
 };

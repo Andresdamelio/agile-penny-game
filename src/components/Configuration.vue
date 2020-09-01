@@ -20,7 +20,7 @@
         </p>
       </div>
 
-      <div class="col-12 col-sm-12 col-md-5 offset-md-1">
+      <div class="col-12 col-sm-12 col-md-5 offset-md-1 mb-2">
         <div class="card rounded">
           <div class="card-header text-center" v-if="!rounds_generated">Iniciar nueva partida</div>
           <div class="card-header text-center" v-else>
@@ -45,14 +45,18 @@
               >El número de jugadores debe ser mayor a 1 y menor o igual que 5</small>
             </div>
             <div class="text-right">
-              <button class="btn btn-primary rounded" @click="generateRounds" :disabled="showRule">Generar Rondas</button>
+              <button
+                class="btn btn-primary rounded create-round"
+                @click="generateRounds"
+                :disabled="showRule"
+              >Generar Rondas</button>
             </div>
           </div>
           <div class="card-body text-center" v-else>
             <p class="card-text" v-for="(round, index) in rounds" :key="round.key">
               <span>Iteración {{index + 1}} - Lote de {{round.coins}} monedas</span>
             </p>
-            <button class="btn btn-primary rounded" @click="play">Comenzar</button>
+            <button class="btn btn-primary rounded play-game" @click="play">Comenzar</button>
           </div>
         </div>
       </div>
@@ -75,7 +79,7 @@ export default {
       numberOfPlayers: 2,
       showRule: false,
       rounds: rounds,
-      rounds_generated: false,
+      rounds_generated: false
     };
   },
   methods: {
@@ -90,16 +94,9 @@ export default {
       }
     },
 
-    removeRound(round) {
-      const roundIndex = this.rounds.indexOf(round);
-      if (roundIndex !== -1) {
-        this.rounds.splice(roundIndex, 1);
-      }
-    },
-
     generateRounds() {
       this.rounds_generated = true;
-      console.log("Rondas", this.rounds);
+      this.$store.dispatch("socket_new_room", this.numberOfPlayers);
     },
 
     play() {
@@ -121,6 +118,14 @@ export default {
   color: #e64a19;
   font-size: 28px;
 }
+
+.create-round, .play-game,
+.create-round:hover, .play-game:hover,
+.create-round:active, .play-game:active {
+  background-color: #e64a19 !important;
+  border-color: #e64a19 !important;
+}
+
 .instructions {
   line-height: 1.7;
   text-align: justify;
