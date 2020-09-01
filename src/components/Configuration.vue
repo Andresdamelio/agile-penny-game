@@ -2,21 +2,28 @@
   <div class="container">
     <div class="row">
       <div class="col-12" v-show="loading">Cargando...</div>
-      <div class="col-12" v-show="!loading">
-        <h1 class="instructions-title text-center">¡Bienvenido al juego de de las monedas!</h1>
+      <div class="col-12 mb-4" v-show="!loading">
+        <h1 class="instructions-title text-center">¡Bienvenido al juego de las monedas!</h1>
       </div>
       <div class="col-6" v-show="!loading">
         <p class="instructions">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras tristique, turpis id ultricies condimentum, turpis nisl laoreet est, non ultricies ipsum magna sed turpis. Ut augue felis, laoreet non massa at, ullamcorper congue diam. Nam laoreet sagittis feugiat. Vestibulum vitae elit facilisis, suscipit nunc at, hendrerit lorem. Nullam nec porttitor quam, ut viverra nisi. Pellentesque viverra enim nisl, eget ornare libero tempus eu. Integer blandit varius neque laoreet ullamcorper. Sed maximus magna at tellus imperdiet cursus. Integer varius, nisi lobortis finibus efficitur, nisi orci volutpat odio, sed luctus augue ante at tortor. Cras tempor auctor tortor vitae iaculis.
-          Aenean sit amet euismod enim. Ut finibus imperdiet magna vel placerat. Vivamus ut eros mi. Cras sollicitudin ultricies ligula. Sed quis nulla id ipsum vestibulum commodo. Donec id nulla quis nisi mollis suscipit sit amet porttitor turpis. Vestibulum cursus scelerisque sem sit amet vehicula. Nam sodales in nisl ac elementum. Nunc euismod sodales libero, et faucibus neque sagittis nec. Maecenas mattis ornare nisi quis cursus. Nulla facilisi. Nam eu tincidunt leo. Mauris ultricies arcu ex, et lacinia tortor pellentesque in. Vestibulum sed mollis sem, sit amet viverra eros. Nunc congue lacus libero.
-          Sed dictum eleifend arcu, sed faucibus ligula pellentesque nec. Praesent euismod pharetra lacus a porttitor. Interdum et malesuada fames ac ante ipsum primis in faucibus. Aliquam erat volutpat. Aliquam in iaculis magna. Nullam egestas erat ac interdum aliquet. Nullam vitae fermentum diam, eleifend blandit nunc. Vestibulum rutrum tempus lorem quis lacinia. Integer consequat ante a dolor pellentesque, quis sollicitudin dui accumsan. Mauris pellentesque lacus ut ex vestibulum, sit amet laoreet nibh scelerisque. Cras non tortor eget lacus tincidunt pellentesque ac ornare felis. Donec quis lectus ullamcorper, tempus lectus quis, sollicitudin tortor. Fusce nec sem aliquam, venenatis elit at, fermentum ipsum. Nullam id mi sed ipsum gravida consequat.
-          Duis mauris risus, efficitur at tortor sit amet, blandit vulputate nisl. Quisque vel diam a nisi rhoncus vehicula ut sed leo. Pellentesque pellentesque dignissim posuere. Praesent a magna euismod, feugiat mauris dictum, tincidunt augue. Mauris tempus felis eget tincidunt euismod. Aliquam massa nibh, tristique et nibh eu, congue hendrerit purus. Nunc sodales lobortis blandit. Aenean nec arcu eget lacus interdum lacinia feugiat non arcu. Nam ut neque libero. Nunc ac ligula vel magna elementum elementum a cursus ipsum. Nam imperdiet a metus sit amet tempus. Phasellus sed lorem scelerisque, scelerisque nulla non, commodo nisl. Suspendisse est dolor, dignissim at viverra sed, vestibulum ac neque. Nulla et purus dapibus, mollis elit vel, sagittis ex. Morbi sit amet dignissim ante.
-          Ut et egestas diam. Donec tempor lacinia convallis. Suspendisse sed nisl maximus, volutpat massa non, posuere velit. Sed fermentum aliquet justo, nec sodales nunc viverra quis. In ullamcorper mauris velit, quis ornare nunc commodo eu. Duis volutpat libero quis lobortis cursus. Donec porta sem et est convallis consequat. Vestibulum tempor ligula et mauris sollicitudin, nec lobortis metus luctus. Phasellus accumsan metus eget eros blandit, quis porta lectus convallis. Donec ultrices quis tellus id pharetra. Etiam nec sapien sit amet sem feugiat iaculis. Aliquam vulputate iaculis tempus.
-          Vivamus et libero urna. Quisque vitae nulla ut quam pretium tincidunt. Curabitur elementum porttitor quam vitae molestie. Sed ut dolor scelerisque, accumsan arcu non, varius lectus. Pellentesque dignissim turpis et lacus tempus, sit amet feugiat lacus sodales. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Nulla condimentum metus neque, vitae iaculis sapien fermentum et. Etiam ultrices lobortis turpis sed blandit. Nunc vel consectetur sem, at tincidunt magna.
+          En este juego tu y tus compañeros representan una
+          fábrica que procesa monedas de una manera muy sencilla: Dando vuelta monedas.
+          Para que tu y tus compañeros puedan ver el efecto de cambiar el tamaño del “lote” de
+          monedas y su impacto en el flujo de trabajo, haremos un conjunto de experimentos en
+          esta fábrica de monedas.
+          Un lote de monedas representa un conjunto de monedas, por ejemplo, un lote de 5
+          monedas representa 5 monedas, un lote de 10 monedas representa un lote de a 10 y así
+          sucesivamente.
+          En la fábrica en cada experimento cambiaremos cada lote a un menor tamaño y veremos
+          como impacta en la eficiencia de la operación.
         </p>
       </div>
       <div class="col-5 offset-1 text-center" v-if="!loading">
         <el-card class="box-card">
+          <div slot="header" class="clearfix">
+            <span>Iniciar nueva partida</span>
+          </div>
           <div v-if="!rounds_generated">
             <el-form :model="form" ref="form" :rules="rules">
               <el-form-item prop="number_of_players" label="Número de jugadores">
@@ -34,8 +41,8 @@
                   :min="min_number_of_coins"
                 ></el-input-number>
               </el-form-item>
-              <el-form-item>
-                <el-button type="primary" @click="generateRounds">Generar Rondas</el-button>
+              <el-form-item class="button-bottom">
+                <el-button type="primary" round @click="generateRounds">Generar Rondas</el-button>
               </el-form-item>
             </el-form>
           </div>
@@ -135,5 +142,20 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+.instructions-title {
+  color: #e64a19;
+  font-size: 28px;
+}
+.instructions {
+  line-height: 1.7;
+  text-align: justify;
+  color: #606266;
+}
+.button-bottom{
+    position: absolute;
+    right: 0;
+    position: absolute;
+    width: 100%;
+}
 </style>

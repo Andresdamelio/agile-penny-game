@@ -1,27 +1,25 @@
-import Vue from "vue";
-import App from "./App.vue";
+import Vue from 'vue'
+import App from './App.vue'
 import lang from "element-ui/lib/locale/lang/es";
 import locale from "element-ui/lib/locale";
+import {InputNumber, Form, FormItem,
+  Button, Card, Table, TableColumn} from "element-ui";
 
-Vue.config.productionTip = false;
 
-// Vuex Store
-import store from "./store.js";
-
-// Vue Router
-import router from "./router";
+Vue.config.productionTip = false
 
 /* Configure Element Ui Language*/
 locale.use(lang);
 
-// Globally Registered Components
-import "./globalComponents.js";
+/* Use only the necessary element components*/
+Vue.use(Form);
+Vue.use(FormItem);
+Vue.use(InputNumber);
+Vue.use(Button);
+Vue.use(Card);
+Vue.use(Table);
+Vue.use(TableColumn);
 
 new Vue({
-  store,
-  router,
-  beforeCreate() {
-    store.commit("setSocket", this.$socket);
-  },
-  render: (h) => h(App),
-}).$mount("#app");
+  render: h => h(App),
+}).$mount('#app')
