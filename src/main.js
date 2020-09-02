@@ -21,7 +21,7 @@ new Vue({
   store,
   router,
   beforeCreate() {
-    store.commit("setSocket", this.$socket);
+    store.commit("SET_SOCKET", this.$socket);
   },
   render: (h) => h(App),
 }).$mount("#app");

@@ -100,10 +100,15 @@ export default {
     },
 
     play() {
-      this.$emit("play", {
+      this.$store.commit("SET_GAME", {
         rounds: this.rounds,
-        number_of_players: this.numberOfPlayers,
-        total_number_of_coins: 20
+        players: this.numberOfPlayers,
+        coins: 20
+      });
+
+      this.$router.push({
+        name: "room",
+        params: { id: this.$store.getters["getRoomId"] }
       });
     }
   },
@@ -119,9 +124,12 @@ export default {
   font-size: 28px;
 }
 
-.create-round, .play-game,
-.create-round:hover, .play-game:hover,
-.create-round:active, .play-game:active {
+.create-round,
+.play-game,
+.create-round:hover,
+.play-game:hover,
+.create-round:active,
+.play-game:active {
   background-color: #e64a19 !important;
   border-color: #e64a19 !important;
 }
