@@ -8,24 +8,11 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
   state: {
     io: {},
-    game: {
-      rounds: 0,
-      players: 0,
-      coins: 0,
-    },
-  },
-  getters: {
-    getGame: (state) => {
-      return state.game;
-    },
   },
   mutations: {
     SET_SOCKET: (state, socket) => {
       console.log("Socket iniciado", socket);
       state.io = socket;
-    },
-    SET_GAME: (state, { rounds, players, coins }) => {
-      state.game = { rounds, players, coins };
     },
   },
   modules: {
