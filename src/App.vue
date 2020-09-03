@@ -4,6 +4,7 @@
     <router-view></router-view>
     <!-- <game-index></game-index> -->
     <Footer></Footer>
+    <notify></notify>
   </div>
 </template>
 
@@ -11,12 +12,14 @@
 // import GameIndex from "./pages/GameIndex";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import Notify from "./components/Notify";
 
 export default {
   name: 'App',
   components: {
     Footer,
     Header,
+    Notify
     // GameIndex,
   }
 }

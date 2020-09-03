@@ -8,11 +8,30 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
   state: {
     io: {},
+    notify: {
+      show: false,
+    },
   },
   mutations: {
     SET_SOCKET: (state, socket) => {
       state.io = socket;
     },
+    SHOW_NOTIFY: (state, notify) => {
+      state.notify = notify;
+      setTimeout(() => {
+        state.notify = { show: false };
+      }, 3000);
+    },
+  },
+  actions: {
+    setNotify: ({commit}, notify) => {
+      commit('SHOW_NOTIFY', notify);
+    }
+  },
+  getters: {
+    getNotify: (state) => {
+      return state.notify;
+    }
   },
   modules: {
     pennyModule,
