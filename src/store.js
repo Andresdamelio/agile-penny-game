@@ -16,7 +16,7 @@ const store = new Vuex.Store({
     SET_SOCKET: (state, socket) => {
       state.io = socket;
     },
-    SHOW_NOTIFY: (state, notify) => {
+    SOCKET_SHOW_NOTIFY: (state, {notify}) => {
       state.notify = notify;
       setTimeout(() => {
         state.notify = { show: false };

@@ -23,7 +23,7 @@ const pennyModule = {
     SOCKET_INIT_ROUND: (state, actualRound) => {
       console.log("Ha iniciado una ronda", state, actualRound);
     },
-    SOCKET_NEW_PLAYER: (state, room) => {
+    SOCKET_NEW_PLAYER: (state, { room }) => {
       state.room = room;
     }
   },
@@ -59,7 +59,7 @@ const pennyModule = {
       });
     },
 
-    socket_join_room: ({ rootState, commit, dispatch }, { name, roomId }) => {
+    socket_join_room: ({ rootState, commit }, { name, roomId }) => {
       rootState.io.emit("joinRoom", { name, roomId }, (resp) => {
         const { room } = resp;
         if (resp.ok) {
@@ -68,7 +68,6 @@ const pennyModule = {
             "SET_CURRENT_PLAYER",
             room.players[room.players.length - 1].id
           );
-          dispatch("setNotify", { show: true, title: "Nuevo jugador", message: `${name} se ha unido a la sala` });
         } else {
           console.log("Algo salió mal, recargue la página");
         }
