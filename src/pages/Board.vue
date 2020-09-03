@@ -37,6 +37,11 @@
         ></player-zone>
       </div>
     </div>
+    <div v-if="showModal">
+      <transition name="modal">
+        <form-player :showModal.sync="showModal"></form-player>
+      </transition>
+    </div>
   </div>
 </template>
 
@@ -44,6 +49,7 @@
 import { mapGetters } from "vuex";
 import PlayerZone from "../components/PlayerZone";
 import Timer from "@/components/Timer";
+import FormPlayer from "@/components/FormPlayer";
 const coinsDistribution = {
   20: {
     rows: 5,
@@ -76,7 +82,8 @@ export default {
         restart: false,
         actualTime: null
       },
-      results: []
+      results: [],
+      showModal: true,
     };
   },
   computed: {
@@ -95,7 +102,8 @@ export default {
   },
   components: {
     PlayerZone,
-    Timer
+    Timer,
+    FormPlayer
   },
 
   methods: {
@@ -170,7 +178,7 @@ export default {
     for (let i = 0; i < this.configurationResult.rounds.length; i++) {
       this.results.push([]);
     }
-  }
+  },
 };
 </script>
 
@@ -192,4 +200,5 @@ export default {
   background-color: #ffecb3 !important;
   color: #303133 !important;
 }
+
 </style>
