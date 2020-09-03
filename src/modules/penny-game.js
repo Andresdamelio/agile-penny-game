@@ -38,6 +38,9 @@ const pennyModule = {
     isThereRoom: (state) => {
       return state.isThereRoom;
     },
+    getCurrentPlayer: (state) => {
+      return state.currentPlayer;
+    }
   },
   actions: {
     socket_new_room: ({ rootState, commit, dispatch }, { name, players }) => {

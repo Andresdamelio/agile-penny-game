@@ -45,7 +45,7 @@ export default {
   },
   methods: {
     joinGame(){
-      //Unirse al juego
+      this.$store.dispatch("socket_join_room", {name: this.name,roomId: this.$route.params.id});
       this.$emit('update:showModal',false);
     }
   },

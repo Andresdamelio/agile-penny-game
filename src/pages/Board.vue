@@ -37,7 +37,7 @@
         ></player-zone>
       </div>
     </div>
-    <div v-if="showModal">
+    <div v-if="showModal && !currentPlayer">
       <transition name="modal">
         <form-player :showModal.sync="showModal"></form-player>
       </transition>
@@ -84,6 +84,7 @@ export default {
       },
       results: [],
       showModal: true,
+      currentPlayer: this.$store.getters['getCurrentPlayer'],
     };
   },
   computed: {
