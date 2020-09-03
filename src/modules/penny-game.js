@@ -10,6 +10,9 @@ const pennyModule = {
     },
   },
   mutations: {
+    ADD_ROOM: (state, room) => {
+      state.rooms.push(room);
+    },
     SET_ROOM: (state, room) => {
       state.room = room;
     },
@@ -18,7 +21,6 @@ const pennyModule = {
         `/room/${roomId}`,
         process.env.VUE_APP_URL
       ).href;
-      console.log(state.magigLink);
     },
     SET_GAME: (state, { rounds, players, coins }) => {
       state.game = { rounds, players, coins };
@@ -33,11 +35,20 @@ const pennyModule = {
     },
   },
   actions: {
-    socket_new_room: ({ rootState, commit }, numberOfPlayers) => {
-      rootState.io.emit("newRoom", numberOfPlayers, (resp) => {
+    socket_new_room: ({ rootState, commit }, { name, players }) => {
+      rootState.io.emit("newRoom", players, (resp) => {
         if (resp.ok) {
-          commit("SET_ROOM", resp.room);
           commit("SET_MAGIG_LINK", resp.room.id);
+          rootState.io.emit(
+            "joinRoom",
+            { name, roomId: resp.room.id },
+            (resp) => {
+              if (resp.ok) {
+                commit("ADD_ROOM", resp.room);
+                commit("SET_ROOM", resp.room);
+              }
+            }
+          );
         } else {
           console.error("Algo salió mal, no se pudo crear la sala");
         }

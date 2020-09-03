@@ -2,10 +2,12 @@
   <header
     class="container-fluid custom-header d-flex justify-content-between align-content-center flex-column flex-sm-row mb-3"
   >
+    <router-link to="/">
     <div class="d-flex align-content-center justify-content-center justify-content-sm-start">
       <img class="icon-header" src="@/assets/img/coin.svg" alt="image coin" />
       <h1 class="m-0">Penny Game</h1>
     </div>
+    </router-link>
     <ul class="nav justify-content-center justify-content-sm-start">
       <li class="nav-item">Inicio</li>
       <li class="nav-item">Mis salas</li>
@@ -34,6 +36,9 @@ export default {
   }
   li {
     padding: 0 10px;
+  }
+  a:hover {
+    text-decoration: none;
   }
 }
 .icon-header {

@@ -1,19 +1,20 @@
 <template>
   <div class="container my-5">
-    <button class="btn btn-primary" @click="stopPlayTimer">
+    <button class="btn btn-primary timer" @click="stopPlayTimer">
       <timer :running="timer.running" :restart="timer.restart" v-on:timeChange="onTimeChange"></timer>
     </button>
 
-    
+    <button class="ml-2 btn btn-primary magic-link" @click="copy">Copiar link</button>
+
+    <input type="hidden" :value="$store.state.pennyModule.magigLink" ref="magicLink" />
+
     <h1 class="text-center">Ronda {{actualRoundIndex + 1}}</h1>
-    <p v-if="configurationResult.rounds[actualRoundIndex].number_of_coins > 1">
-      Deben moves lotes de {{this.configurationResult.rounds[actualRoundIndex].number_of_coins}}
-      monedas hasta haber movido todas las monedas de su lugar
+
+    <p>
+      Deben mover lotes de {{this.configurationResult.rounds[actualRoundIndex].coins}}
+      {{ configurationResult.rounds[actualRoundIndex].coins > 1 ? "monedas" : "moneda"}} hasta haber movido todas las monedas de su lugar
     </p>
-    <p v-else>
-      Deben mover lotes de {{this.configurationResult.rounds[actualRoundIndex].number_of_coins}}
-      moneda hasta haber movido todas las monedas de su lugar
-    </p>
+
     <div class="row no-gutters" v-show="showPlayerZones">
       <div class="col-12 col-sm" v-for="(player, index) in players" :key="index">
         <player-zone
@@ -22,8 +23,8 @@
           :end="index === players.length - 1"
           :player="player"
           :previousPlayer="index !== 0 ? players[index - 1] : null"
-          :totalCoins="configurationResult.total_number_of_coins"
-          :roundCoins="configurationResult.rounds[actualRoundIndex].number_of_coins"
+          :totalCoins="configurationResult.coins"
+          :roundCoins="configurationResult.rounds[actualRoundIndex].coins"
           :distribution="distribution"
           :coin-config="coinConfig"
           v-on:playerMoveCoins="onPlayerMoveCoins"
@@ -52,12 +53,9 @@ const coinsDistribution = {
     cols: 10
   }
 };
+
 export default {
   name: "Board",
-  components: {
-    PlayerZone,
-    Timer
-  },
   data() {
     return {
       distribution: null,
@@ -88,31 +86,24 @@ export default {
       return this.timer.running;
     }
   },
-  created() {
-    for (let i = 0; i < this.configurationResult.number_of_players; i++) {
-      this.players.push({
-        id: i,
-        movedCoins: []
-      });
-    }
-    this.distribution =
-      coinsDistribution[this.configurationResult.total_number_of_coins];
-    this.coinConfig.width =
-      this.configurationResult.number_of_players > 4 ? "25px" : "30px";
-    this.coinConfig.height =
-      this.configurationResult.number_of_players > 4 ? "25px" : "30px";
-    for (let i = 0; i < this.configurationResult.rounds.length; i++) {
-      this.results.push([]);
-    }
+  components: {
+    PlayerZone,
+    Timer
   },
   methods: {
+    copy() {
+      let magicLink = this.$refs.magicLink;
+      magicLink.setAttribute("type", "text");
+      magicLink.select();
+      document.execCommand("copy");
+      magicLink.setAttribute("type", "hidden");
+    },
+
     onPlayerMoveCoins(moveData) {
       const playerIndex = moveData.playerIndex;
       const movedCoins = moveData.movedCoins;
       this.players[playerIndex].movedCoins = movedCoins;
-      if (
-        movedCoins.length === this.configurationResult.total_number_of_coins
-      ) {
+      if (movedCoins.length === this.configurationResult.coins) {
         /* Register time for the last movement of coins done by the user*/
         this.results[this.actualRoundIndex][
           playerIndex
@@ -120,7 +111,7 @@ export default {
       }
       if (
         playerIndex === this.players.length - 1 &&
-        movedCoins.length === this.configurationResult.total_number_of_coins
+        movedCoins.length === this.configurationResult.coins
       ) {
         if (this.isLastRound) {
           this.$emit("endgame", {
@@ -151,9 +142,42 @@ export default {
       this.timer.restart = false;
       this.timer.running = !this.timer.running;
     }
+  },
+  created() {
+    for (let i = 0; i < this.configurationResult.players; i++) {
+      this.players.push({
+        id: i,
+        movedCoins: []
+      });
+    }
+    this.distribution = coinsDistribution[this.configurationResult.coins];
+    this.coinConfig.width =
+      this.configurationResult.players > 4 ? "25px" : "30px";
+    this.coinConfig.height =
+      this.configurationResult.players > 4 ? "25px" : "30px";
+    for (let i = 0; i < this.configurationResult.rounds.length; i++) {
+      this.results.push([]);
+    }
   }
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+.btn-primary,
+.btn-primary:hover,
+.btn-primary:active,
+.btn-primary:focus {
+  border-color: #e64a19 !important;
+  box-shadow: none !important;
+}
+.timer {
+  background-color: #e64a19 !important;
+}
+
+.magic-link,
+.magic-link:focus,
+.magic-link:active {
+  background-color: #ffecb3 !important;
+  color: #303133 !important;
+}
 </style>

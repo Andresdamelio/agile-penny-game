@@ -29,6 +29,16 @@
           </div>
           <div class="card-body" v-if="!rounds_generated">
             <div class="form-group">
+              <label for="numberPlayers">Nombre</label>
+              <input
+                type="text"
+                class="form-control"
+                v-model="name"
+                placeholder="Introduce tu nombre"
+              />
+              <small class="form-text text-danger" v-if="showRule.name">El campo nombre es requerido</small>
+            </div>
+            <div class="form-group">
               <label for="numberPlayers">Número de jugadores</label>
               <input
                 type="number"
@@ -41,15 +51,15 @@
               />
               <small
                 class="form-text text-danger"
-                v-if="showRule"
+                v-if="showRule.number"
               >El número de jugadores debe ser mayor a 1 y menor o igual que 5</small>
             </div>
             <div class="text-right">
               <button
                 class="btn btn-primary rounded create-round"
                 @click="generateRounds"
-                :disabled="showRule"
-              >Generar Rondas</button>
+                :disabled="showRule.send"
+              >Generar Rondas {{ !showRule.name }}</button>
             </div>
           </div>
           <div class="card-body text-center" v-else>
@@ -77,26 +87,51 @@ export default {
   data: () => {
     return {
       numberOfPlayers: 2,
-      showRule: false,
+      name: "",
+      showRule: {
+        number: false,
+        name: false,
+        send: true
+      },
       rounds: rounds,
       rounds_generated: false
     };
   },
   methods: {
     validate() {
+      console.log("Se ejecuto al empezar");
+      if (
+        !this.numberOfPlayers ||
+        ![2, 3, 4, 5].includes(this.numberOfPlayers) ||
+        !this.name
+      ) {
+        this.showRule.send = true;
+      } else {
+        this.showRule.send = false;
+      }
+
       if (
         !this.numberOfPlayers ||
         ![2, 3, 4, 5].includes(this.numberOfPlayers)
       ) {
-        this.showRule = true;
+        this.showRule.number = true;
       } else {
-        this.showRule = false;
+        this.showRule.number = false;
+      }
+
+      if (!this.name) {
+        this.showRule.name = true;
+      } else {
+        this.showRule.name = false;
       }
     },
 
     generateRounds() {
       this.rounds_generated = true;
-      this.$store.dispatch("socket_new_room", this.numberOfPlayers);
+      this.$store.dispatch("socket_new_room", {
+        name: this.name,
+        players: this.numberOfPlayers
+      });
     },
 
     play() {
@@ -113,7 +148,8 @@ export default {
     }
   },
   watch: {
-    numberOfPlayers: "validate"
+    numberOfPlayers: "validate",
+    name: "validate"
   }
 };
 </script>
@@ -124,14 +160,13 @@ export default {
   font-size: 28px;
 }
 
-.create-round,
-.play-game,
-.create-round:hover,
-.play-game:hover,
-.create-round:active,
-.play-game:active {
+.btn-primary,
+.btn-primary:hover,
+.btn-primary:active,
+.btn-primary:focus {
   background-color: #e64a19 !important;
   border-color: #e64a19 !important;
+  box-shadow: none !important;
 }
 
 .instructions {
