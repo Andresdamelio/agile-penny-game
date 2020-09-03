@@ -59,7 +59,7 @@
                 class="btn btn-primary rounded create-round"
                 @click="generateRounds"
                 :disabled="showRule.send"
-              >Generar Rondas {{ !showRule.name }}</button>
+              >Generar Rondas</button>
             </div>
           </div>
           <div class="card-body text-center" v-else>
@@ -99,7 +99,6 @@ export default {
   },
   methods: {
     validate() {
-      console.log("Se ejecuto al empezar");
       if (
         !this.numberOfPlayers ||
         ![2, 3, 4, 5].includes(this.numberOfPlayers) ||
@@ -135,12 +134,6 @@ export default {
     },
 
     play() {
-      this.$store.commit("SET_GAME", {
-        rounds: this.rounds,
-        players: this.numberOfPlayers,
-        coins: 20
-      });
-
       this.$router.push({
         name: "room",
         params: { id: this.$store.getters["getRoomId"] }

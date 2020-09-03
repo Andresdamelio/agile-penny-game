@@ -3,11 +3,6 @@ const pennyModule = {
     rooms: [],
     room: null,
     magigLink: null,
-    game: {
-      rounds: 0,
-      players: 0,
-      coins: 0,
-    },
   },
   mutations: {
     ADD_ROOM: (state, room) => {
@@ -17,13 +12,10 @@ const pennyModule = {
       state.room = room;
     },
     SET_MAGIG_LINK: (state, roomId) => {
-      state.magigLink = new URL(
-        `/room/${roomId}`,
-        process.env.VUE_APP_URL
-      ).href;
+      state.magigLink = new URL(`/room/${roomId}`, window.location.origin).href;
     },
-    SET_GAME: (state, { rounds, players, coins }) => {
-      state.game = { rounds, players, coins };
+    SOCKET_INIT_ROUND: (state, actualRound) => {
+      console.log("Ha iniciado una ronda", state, actualRound);
     },
   },
   getters: {
@@ -31,7 +23,11 @@ const pennyModule = {
       return state.room.id;
     },
     getGame: (state) => {
-      return state.game;
+      return {
+        rounds: state.room.rounds,
+        players: state.room.size,
+        coins: 20,
+      };
     },
   },
   actions: {
@@ -53,6 +49,23 @@ const pennyModule = {
           console.error("Algo salió mal, no se pudo crear la sala");
         }
       });
+    },
+    socket_init_round: ({ rootState, state }) => {
+      rootState.io.emit("initRound", state.room.id);
+    },
+
+    get_room_by_id: ({ commit }, id) => {
+      fetch(`${process.env.VUE_APP_URL}/room/${id}`)
+        .then((resp) => {
+          return resp.json();
+        })
+        .then((resp) => {
+          if (resp.ok) {
+            commit("SET_ROOM", resp.room);
+          } else {
+            console.log("Ha ocurrido un error");
+          }
+        });
     },
   },
 };

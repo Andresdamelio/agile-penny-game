@@ -1,7 +1,12 @@
 <template>
   <div class="container my-5">
     <button class="btn btn-primary timer" @click="stopPlayTimer">
-      <timer :running="timer.running" :restart="timer.restart" v-on:timeChange="onTimeChange"></timer>
+      <timer
+        :running="timer.running"
+        :currentDate.sync="currentDate"
+        :restart="timer.restart"
+        v-on:timeChange="onTimeChange"
+      ></timer>
     </button>
 
     <button class="ml-2 btn btn-primary magic-link" @click="copy">Copiar link</button>
@@ -11,8 +16,8 @@
     <h1 class="text-center">Ronda {{actualRoundIndex + 1}}</h1>
 
     <p>
-      Deben mover lotes de {{this.configurationResult.rounds[actualRoundIndex].coins}}
-      {{ configurationResult.rounds[actualRoundIndex].coins > 1 ? "monedas" : "moneda"}} hasta haber movido todas las monedas de su lugar
+      Deben mover lotes de {{this.configurationResult.rounds[actualRoundIndex].sizeLot}}
+      {{ configurationResult.rounds[actualRoundIndex].sizeLot > 1 ? "monedas" : "moneda"}} hasta haber movido todas las monedas de su lugar
     </p>
 
     <div class="row no-gutters" v-show="showPlayerZones">
@@ -24,7 +29,7 @@
           :player="player"
           :previousPlayer="index !== 0 ? players[index - 1] : null"
           :totalCoins="configurationResult.coins"
-          :roundCoins="configurationResult.rounds[actualRoundIndex].coins"
+          :roundCoins="configurationResult.rounds[actualRoundIndex].sizeLot"
           :distribution="distribution"
           :coin-config="coinConfig"
           v-on:playerMoveCoins="onPlayerMoveCoins"
@@ -58,6 +63,7 @@ export default {
   name: "Board",
   data() {
     return {
+      currentDate: 0,
       distribution: null,
       players: [],
       actualRoundIndex: 0,
@@ -77,6 +83,7 @@ export default {
     ...mapGetters({
       configurationResult: "getGame"
     }),
+
     isLastRound() {
       return (
         this.actualRoundIndex === this.configurationResult.rounds.length - 1
@@ -90,6 +97,7 @@ export default {
     PlayerZone,
     Timer
   },
+
   methods: {
     copy() {
       let magicLink = this.$refs.magicLink;
@@ -141,6 +149,10 @@ export default {
     stopPlayTimer() {
       this.timer.restart = false;
       this.timer.running = !this.timer.running;
+
+      if (this.currentDate == 0) {
+        this.$store.dispatch("socket_init_round");
+      }
     }
   },
   created() {

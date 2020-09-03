@@ -11,12 +11,7 @@
 <script>
 export default {
   name: "Timer",
-  data() {
-    return {
-      currentDate: 0
-    };
-  },
-  props: ["running", "restart"],
+  props: ["running", "restart", "currentDate"],
   computed: {
     hours() {
       return Math.floor((this.currentDate / (1000 * 60 * 60)) % 24);
@@ -30,7 +25,7 @@ export default {
   },
   watch: {
     restart() {
-      this.currentDate = 0;
+      this.$emit("update:currentDate", 0);
     }
   },
   filters: {
@@ -46,7 +41,7 @@ export default {
       if (!this.running) {
         return;
       }
-      this.currentDate += 1000;
+      this.$emit("update:currentDate", this.currentDate + 1000);
       this.$emit("timeChange", {
         millis: this.currentDate,
         seconds: this.seconds,

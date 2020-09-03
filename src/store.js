@@ -11,7 +11,6 @@ const store = new Vuex.Store({
   },
   mutations: {
     SET_SOCKET: (state, socket) => {
-      console.log("Socket iniciado", socket);
       state.io = socket;
     },
   },
