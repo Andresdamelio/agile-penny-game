@@ -1,5 +1,5 @@
 <template>
-  <div class="container my-5">
+  <div class="container my-5" v-if="isThereRoom">
     <button class="btn btn-primary timer" @click="stopPlayTimer">
       <timer
         :running="timer.running"
@@ -88,6 +88,7 @@ export default {
   },
   computed: {
     ...mapGetters({
+      isThereRoom: "isThereRoom",
       configurationResult: "getGame"
     }),
 
@@ -162,6 +163,9 @@ export default {
         this.$store.dispatch("socket_init_round");
       }
     }
+  },
+  beforeCreate() {
+    this.$store.dispatch("get_room_by_id", this.$route.params.id);
   },
   created() {
     for (let i = 0; i < this.configurationResult.players; i++) {
