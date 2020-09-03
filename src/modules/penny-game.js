@@ -23,6 +23,9 @@ const pennyModule = {
     SOCKET_INIT_ROUND: (state, actualRound) => {
       console.log("Ha iniciado una ronda", state, actualRound);
     },
+    SOCKET_NEW_PLAYER: (state, room) => {
+      state.room = room;
+    }
   },
   getters: {
     getRoomId: (state) => {
