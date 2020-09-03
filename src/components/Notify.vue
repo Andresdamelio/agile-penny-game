@@ -1,19 +1,8 @@
 <template>
-  <div
-    aria-live="polite"
-    aria-atomic="true"
-    style="position: relative; min-height: 200px;"
-  >
-    <div
-      :class="notify.show?'toast fade show': 'toast'"
-      style="position: absolute; top: 0; right: 0;"
-    >
+  <div aria-live="polite" aria-atomic="true" style="min-height: 200px;">
+    <div :class="notify.show ? 'toast fade show': 'toast'" id="toast">
       <div class="toast-header">
         <strong class="mr-auto">{{ notify.title }}</strong>
-        <small>Ahora</small>
-        <button type="button" class="ml-2 mb-1 close" @click="closeNotify">
-          <span aria-hidden="true">x</span>
-        </button>
       </div>
       <div class="toast-body">{{ notify.message }}</div>
     </div>
@@ -23,14 +12,27 @@
 <script>
 export default {
   methods: {
-    closeNotify(){
-      console.log("Cerra")
+    closeNotify() {
+      console.log("Cerra");
     }
   },
   computed: {
-    notify(){
+    notify() {
       return this.$store.getters["getNotify"];
     }
-  },
-}
+  }
+};
 </script>
+
+<style lang="scss">
+#toast {
+  position: absolute;
+  bottom: 65px;
+  right: 10px;
+
+  .toast-header {
+    background-color: #ffecb3;
+    color: #e64a19;
+  }
+}
+</style>
