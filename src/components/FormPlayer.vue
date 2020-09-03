@@ -5,7 +5,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">Ingresar</h5>
-            <button type="button" class="close" @click="showModal=false">
+            <button type="button" class="close" @click="close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
@@ -22,7 +22,7 @@
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" @click="showModal=false">Cancelar</button>
+            <button type="button" class="btn btn-secondary" @click="close">Cancelar</button>
             <button type="button" class="btn btn-primary" @click="joinGame">Entrar</button>
           </div>
         </div>
@@ -35,24 +35,29 @@ export default {
   props: {
     showModal: {
       type: Boolean,
-      default: true,
+      default: true
     }
   },
-  data(){
+  data() {
     return {
-      name: null,
-    }
+      name: null
+    };
   },
   methods: {
-    joinGame(){
-      this.$store.dispatch("socket_join_room", {name: this.name,roomId: this.$route.params.id});
-      this.$emit('update:showModal',false);
+    joinGame() {
+      this.$store.dispatch("socket_join_room", {
+        name: this.name,
+        roomId: this.$route.params.id
+      });
+      this.$emit("update:showModal", false);
+    },
+    close() {
+      this.$emit("update:showModal", false);
     }
-  },
-}
+  }
+};
 </script>
 <style lang="scss">
-  /* Modal */
 .modal-mask {
   position: fixed;
   z-index: 9998;
@@ -68,5 +73,23 @@ export default {
 .modal-wrapper {
   display: table-cell;
   vertical-align: middle;
+}
+
+.btn,
+.btn:hover,
+.btn:active,
+.btn:focus {
+  border-color: #e64a19 !important;
+  box-shadow: none !important;
+}
+
+.btn-primary {
+  background-color: #e64a19 !important;
+}
+
+.btn-secondary,
+.close {
+  background-color: transparent !important;
+  color: #e64a19 !important;
 }
 </style>
