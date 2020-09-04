@@ -55,18 +55,17 @@ export default {
   },
   computed: {
     canPressMoreCoins() {
-      return this.player.selectedCoins.length < this.roundCoins;
+      console.log("boton", this.player.selectedCoins.length < this.roundCoins);
+      return this.player.selectedCoins.length <= this.roundCoins;
     },
     canPlay() {
-      /* const firstPlayerNotMovedAll =
+      const firstPlayerNotMovedAll =
         this.start && this.player.movedCoins.length < this.totalCoins;
       const notFirstPlayerNotMovedAll =
         this.previousPlayer !== null &&
         this.previousPlayer.movedCoins.length &&
         this.player.movedCoins.length < this.totalCoins;
       return firstPlayerNotMovedAll || notFirstPlayerNotMovedAll;
- */
-      return true;
     }
   },
   methods: {
@@ -84,33 +83,29 @@ export default {
         return;
       }
 
-      /* this.selectedCoins.push({
-        col: colsIndex,
-        row: rowsIndex
-      }); */
-
-      this.$store.dispatch("socket_select_coin", {
+      this.$store.dispatch("socket_move_coin", {
         coordinateX: rowsIndex,
-        coordinateY: colsIndex
+        coordinateY: colsIndex,
+        type: "select"
       });
-
-      /* this.$refs.coin[0].press(); */
     },
 
     onCoinDeselection(rowsIndex, colsIndex) {
-      const index = this.player.selectedCoins.findIndex(
+      const selected = this.player.selectedCoins.findIndex(
         coin => coin.row === rowsIndex && coin.col === colsIndex
       );
 
-      console.log(index)
+      if (!selected) {
+        return;
+      }
 
-     /*  this.selectedCoins.splice(index, 1); */
-
-      this.$store.dispatch("socket_deselect_coin", {
+      this.$store.dispatch("socket_move_coin", {
         coordinateX: rowsIndex,
-        coordinateY: colsIndex
+        coordinateY: colsIndex,
+        type: "deselect"
       });
     },
+
     moveCoins() {
       this.movedCoins = this.movedCoins.concat(this.player.selectedCoins);
       this.$emit("playerMoveCoins", {
@@ -138,14 +133,15 @@ export default {
     }
   },
   watch: {
-    "player" :{
-      handler(){
-        console.log(`Moneda movida ${this.player.selectedCoins[this.player.selectedCoins.length-1]}`)
+    player: {
+      handler() {
+        console.log(
+          `Moneda movida ${
+            this.player.selectedCoins[this.player.selectedCoins.length - 1]
+          }`
+        );
       }
     }
-  },
-  mounted() {
-    console.log("player", this.player);
   }
 };
 </script>

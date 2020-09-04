@@ -27,14 +27,10 @@ const pennyModule = {
     SOCKET_NEW_PLAYER: (state, { room }) => {
       state.room = room;
     },
-    SOCKET_COIN_SELECTED: (state,  { player, coin }) => {
+    SOCKET_MOVE_COIN: (state,  { player, coin }) => {
       const playerIndex = state.room.players.findIndex( mPlayer => mPlayer.id === player.id );
       Object.assign(state.room.players[playerIndex],player);
       state.moveCoin = coin;
-    },
-    SOCKET_COIN_DESELECTED: (state, { player } ) => {
-      const playerIndex = state.room.players.findIndex( mPlayer => mPlayer.id === player.id );
-      state.room.players[playerIndex] = player;
     },
   },
   getters: {
@@ -89,20 +85,17 @@ const pennyModule = {
       rootState.io.emit("initRound", state.room.id);
     },
 
-    socket_select_coin: ({ rootState, getters }, { coordinateX, coordinateY }) => {
-      rootState.io.emit("selectCoin", {
+    socket_move_coin: ({ rootState, getters }, { coordinateX, coordinateY, type }) => {
+      rootState.io.emit("moveCoin", {
         coordinateX,
         coordinateY,
+        type,
         roomId: getters["getRoomId"],
       });
     },
 
-    socket_deselect_coin: ({ rootState, getters }, { coordinateX, coordinateY }) => {
-      rootState.io.emit("deselectCoin", {
-        coordinateX,
-        coordinateY,
-        roomId: getters["getRoomId"],
-      });
+    socket_move_coins: ({ rootState, getters }, coins ) => {
+      rootState.io.emit("moveCoins", { roomId: getters["getRoomId"], coins })
     },
 
     get_room_by_id: ({ commit }, id) => {

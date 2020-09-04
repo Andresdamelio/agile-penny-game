@@ -37,11 +37,10 @@ export default {
   },
   watch:{
     "$store.state.pennyModule.moveCoin": {
-      handler(val){
+      handler(){
         let coin = this.$store.state.pennyModule.moveCoin;
         if(coin.row === this.info.row && coin.col === this.info.col && coin.playerId === this.info.playerId){
-          console.log("COIN", coin)
-          console.log("VAL", val)
+          console.log("COIN", coin, "Info", this.info)
           this.press();
         }
       }
