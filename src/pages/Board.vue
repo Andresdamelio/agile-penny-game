@@ -20,20 +20,23 @@
       {{ configurationResult.rounds[actualRoundIndex].sizeLot > 1 ? "monedas" : "moneda"}} hasta haber movido todas las monedas de su lugar
     </p>
 
-    <div class="row no-gutters" v-show="showPlayerZones">
-      <div class="col-12 col-sm" v-for="(player, index) in players" :key="index">
+    <div class="row no-gutters">
+      <div
+        class="col-12 col-sm"
+        v-for="(player, index) in configurationResult.players"
+        :key="index"
+      >
         <player-zone
           :id="index"
           :start="index === 0"
-          :end="index === players.length - 1"
-          :player="player"
-          :previousPlayer="index !== 0 ? players[index - 1] : null"
+          :end="index === configurationResult.players.length - 1"
+          :player.sync="player"
+          :previousPlayer="index !== 0 ? configurationResult.players[index - 1] : null"
           :totalCoins="configurationResult.coins"
           :roundCoins="configurationResult.rounds[actualRoundIndex].sizeLot"
           :distribution="distribution"
-          :coin-config="coinConfig"
-          v-on:playerMoveCoins="onPlayerMoveCoins"
-          v-on:firstSelectionDone="onFirstSelectionDone"
+          @playerMoveCoins="onPlayerMoveCoins"
+          @firstSelectionDone="onFirstSelectionDone"
         ></player-zone>
       </div>
     </div>
@@ -50,33 +53,15 @@ import { mapGetters } from "vuex";
 import PlayerZone from "../components/PlayerZone";
 import Timer from "@/components/Timer";
 import FormPlayer from "@/components/FormPlayer";
-const coinsDistribution = {
-  20: {
-    rows: 5,
-    cols: 4
-  },
-  60: {
-    rows: 10,
-    cols: 6
-  },
-  100: {
-    rows: 10,
-    cols: 10
-  }
-};
 
 export default {
   name: "Board",
   data() {
     return {
       currentDate: 0,
-      distribution: null,
+      distribution: { rows: 5, cols: 4 },
       players: [],
       actualRoundIndex: 0,
-      coinConfig: {
-        width: null,
-        height: null
-      },
       timer: {
         running: false,
         restart: false,
@@ -84,7 +69,7 @@ export default {
       },
       results: [],
       showModal: true,
-      currentPlayer: this.$store.getters['getCurrentPlayer'],
+      currentPlayer: this.$store.getters["getCurrentPlayer"]
     };
   },
   computed: {
@@ -98,9 +83,6 @@ export default {
         this.actualRoundIndex === this.configurationResult.rounds.length - 1
       );
     },
-    showPlayerZones() {
-      return this.timer.running;
-    }
   },
   components: {
     PlayerZone,
@@ -115,6 +97,14 @@ export default {
       magicLink.select();
       document.execCommand("copy");
       magicLink.setAttribute("type", "hidden");
+
+      this.$store.commit("SOCKET_SHOW_NOTIFY", {
+        notify: {
+          show: true,
+          title: "Enlace copiado",
+          message: "El enlace se ha copiado con éxito"
+        }
+      });
     },
 
     onPlayerMoveCoins(moveData) {
@@ -149,13 +139,16 @@ export default {
       this.timer.actualTime = timeData;
     },
     onFirstSelectionDone(playerId) {
-      this.results[this.actualRoundIndex].push({
+      /* this.results[this.actualRoundIndex].push({
         round: this.actualRoundIndex,
         playerId,
         firstSelectionDone: this.timer.actualTime,
         lastMovementDone: null
-      });
+      }); */
+      console.log(playerId)
+      return true
     },
+
     stopPlayTimer() {
       this.timer.restart = false;
       this.timer.running = !this.timer.running;
@@ -175,15 +168,10 @@ export default {
         movedCoins: []
       });
     }
-    this.distribution = coinsDistribution[this.configurationResult.coins];
-    this.coinConfig.width =
-      this.configurationResult.players > 4 ? "25px" : "30px";
-    this.coinConfig.height =
-      this.configurationResult.players > 4 ? "25px" : "30px";
-    for (let i = 0; i < this.configurationResult.rounds.length; i++) {
+    /* for (let i = 0; i < this.configurationResult.rounds.length; i++) {
       this.results.push([]);
-    }
-  },
+    } */
+  }
 };
 </script>
 
@@ -205,5 +193,4 @@ export default {
   background-color: #ffecb3 !important;
   color: #303133 !important;
 }
-
 </style>

@@ -5,6 +5,7 @@ const pennyModule = {
     magigLink: null,
     isThereRoom: false,
     currentPlayer: null,
+    moveCoin: {}
   },
   mutations: {
     ADD_ROOM: (state, room) => {
@@ -25,7 +26,16 @@ const pennyModule = {
     },
     SOCKET_NEW_PLAYER: (state, { room }) => {
       state.room = room;
-    }
+    },
+    SOCKET_COIN_SELECTED: (state,  { player, coin }) => {
+      const playerIndex = state.room.players.findIndex( mPlayer => mPlayer.id === player.id );
+      Object.assign(state.room.players[playerIndex],player);
+      state.moveCoin = coin;
+    },
+    SOCKET_COIN_DESELECTED: (state, { player } ) => {
+      const playerIndex = state.room.players.findIndex( mPlayer => mPlayer.id === player.id );
+      state.room.players[playerIndex] = player;
+    },
   },
   getters: {
     getRoomId: (state) => {
@@ -34,7 +44,8 @@ const pennyModule = {
     getGame: (state) => {
       return {
         rounds: state.room?.rounds ? state.room.rounds : [],
-        players: state.room?.size ? state.room.size : 2,
+        size: state.room?.size ? state.room.size : 2,
+        players: state.room?.players ? state.room.players : [],
         coins: 20,
       };
     },
@@ -43,7 +54,7 @@ const pennyModule = {
     },
     getCurrentPlayer: (state) => {
       return state.currentPlayer;
-    }
+    },
   },
   actions: {
     socket_new_room: ({ rootState, commit, dispatch }, { name, players }) => {
@@ -76,6 +87,22 @@ const pennyModule = {
 
     socket_init_round: ({ rootState, state }) => {
       rootState.io.emit("initRound", state.room.id);
+    },
+
+    socket_select_coin: ({ rootState, getters }, { coordinateX, coordinateY }) => {
+      rootState.io.emit("selectCoin", {
+        coordinateX,
+        coordinateY,
+        roomId: getters["getRoomId"],
+      });
+    },
+
+    socket_deselect_coin: ({ rootState, getters }, { coordinateX, coordinateY }) => {
+      rootState.io.emit("deselectCoin", {
+        coordinateX,
+        coordinateY,
+        roomId: getters["getRoomId"],
+      });
     },
 
     get_room_by_id: ({ commit }, id) => {
