@@ -48,15 +48,13 @@ export default {
   ],
   data() {
     return {
-      /* selectedCoins: [], */
       movedCoins: [],
       firstSelectionDone: false
     };
   },
   computed: {
     canPressMoreCoins() {
-      console.log("boton", this.player.selectedCoins.length < this.roundCoins);
-      return this.player.selectedCoins.length <= this.roundCoins;
+      return this.player.selectedCoins.length < this.roundCoins;
     },
     canPlay() {
       const firstPlayerNotMovedAll =
@@ -75,29 +73,30 @@ export default {
         this.$emit("firstSelectionDone", this.player.id);
       }
 
-      const alreadySelected = this.player.selectedCoins.some(
+      /* const alreadySelected = this.player.selectedCoins.some(
         coin => coin.row === rowsIndex && coin.col === colsIndex
       );
 
       if (alreadySelected) {
         return;
-      }
+      } */
 
       this.$store.dispatch("socket_move_coin", {
         coordinateX: rowsIndex,
         coordinateY: colsIndex,
         type: "select"
       });
+
     },
 
     onCoinDeselection(rowsIndex, colsIndex) {
-      const selected = this.player.selectedCoins.findIndex(
+      /* const selected = this.player.selectedCoins.findIndex(
         coin => coin.row === rowsIndex && coin.col === colsIndex
       );
 
       if (!selected) {
         return;
-      }
+      } */
 
       this.$store.dispatch("socket_move_coin", {
         coordinateX: rowsIndex,
@@ -106,23 +105,29 @@ export default {
       });
     },
 
+    isMoved(rowsIndex, colsIndex) {
+      return this.player.movedCoins.some(
+        coin => coin.row === rowsIndex && coin.col === colsIndex
+      );
+    },
+
     moveCoins() {
+
+      this.$store.dispatch("socket_move_coins");
+
       this.movedCoins = this.movedCoins.concat(this.player.selectedCoins);
       this.$emit("playerMoveCoins", {
         movedCoins: this.movedCoins,
         playerIndex: this.id
       });
-      if (this.movedCoins.length === this.totalCoins) {
+
+      if (this.player.movedCoins.length === this.totalCoins) {
         this.movedCoins = [];
         this.firstSelectionDone = false;
       }
       /* this.selectedCoins = []; */
     },
-    isMoved(rowsIndex, colsIndex) {
-      return this.movedCoins.some(
-        coin => coin.row === rowsIndex && coin.col === colsIndex
-      );
-    },
+
     receivedFromPreviousPlayer(rowsIndex, colsIndex) {
       if (this.previousPlayer === null) {
         return true;
@@ -132,17 +137,6 @@ export default {
       );
     }
   },
-  watch: {
-    player: {
-      handler() {
-        console.log(
-          `Moneda movida ${
-            this.player.selectedCoins[this.player.selectedCoins.length - 1]
-          }`
-        );
-      }
-    }
-  }
 };
 </script>
 
