@@ -32,6 +32,11 @@ const pennyModule = {
       Object.assign(state.room.players[playerIndex],player);
       state.moveCoin = coin;
     },
+    SOCKET_UPDATE_PLAYER: (state, player) => {
+      const playerIndex = state.room.players.findIndex( mPlayer => mPlayer.id === player.id );
+      Object.assign(state.room.players[playerIndex], player);
+
+    },
   },
   getters: {
     getRoomId: (state) => {
@@ -94,8 +99,8 @@ const pennyModule = {
       });
     },
 
-    socket_move_coins: ({ rootState, getters }, coins ) => {
-      rootState.io.emit("moveCoins", { roomId: getters["getRoomId"], coins })
+    socket_move_coins: ({ rootState, getters }) => {
+      rootState.io.emit("moveCoins", { roomId: getters["getRoomId"] })
     },
 
     get_room_by_id: ({ commit }, id) => {
