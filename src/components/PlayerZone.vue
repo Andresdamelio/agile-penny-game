@@ -9,7 +9,7 @@
           v-for="colsIndex in distribution.cols"
           :class="{ 'ml-2': colsIndex !== 1}"
           :ref="`coin${rowsIndex}${colsIndex}`"
-          :info="{col: colsIndex, row: rowsIndex, playerId: player.id}"
+          :info="{col: colsIndex, row: rowsIndex, player: player}"
           :key="colsIndex"
           height="30px"
           width="30px"

@@ -22,12 +22,18 @@ export default {
   },
   methods: {
     press() {
-      console.log("pressing")
+      console.log("pressing");
       if (this.isPressed) {
         this.$emit("deselection");
         this.isPressed = false;
       } else {
         if (!this.canBePressed) {
+          if (
+            this.info.player.selectedCoins.some(coin => coin.row === this.info.row && coin.col === this.info.col)
+          ) {
+            this.$emit("selection");
+            this.isPressed = true;
+          }
           return;
         }
         this.$emit("selection");
@@ -35,12 +41,16 @@ export default {
       }
     }
   },
-  watch:{
+  watch: {
     "$store.state.pennyModule.moveCoin": {
-      handler(){
+      handler() {
         let coin = this.$store.state.pennyModule.moveCoin;
-        if(coin.row === this.info.row && coin.col === this.info.col && coin.playerId === this.info.playerId){
-          console.log("COIN", coin, "Info", this.info)
+        if (
+          coin.row === this.info.row &&
+          coin.col === this.info.col &&
+          coin.playerId === this.info.player.id
+        ) {
+          console.log("COIN", coin, "Info", this.info);
           this.press();
         }
       }
@@ -55,17 +65,17 @@ export default {
   height: 33px;
   display: inline-block;
   cursor: pointer;
-  border-color: #F44336 !important;
+  border-color: #f44336 !important;
   transition: transform 0.5s;
-  &:not(.pressed){
-    background-image: url('../assets/img/dcoin.svg');
+  &:not(.pressed) {
+    background-image: url("../assets/img/dcoin.svg");
     background-size: cover;
   }
 }
 
 .pressed {
   transform: rotateY(180deg);
-  background-image: url('../assets/img/coin.svg');
+  background-image: url("../assets/img/coin.svg");
   background-size: cover;
   background-color: $main-color !important;
 }
