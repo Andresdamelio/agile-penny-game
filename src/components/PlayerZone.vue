@@ -1,31 +1,46 @@
 <template>
-  <div class="player-zone border border-dark p-5" :class="{
-        'border-right-0': start,
-    }">
-    <pre>{{ player }}</pre>
-    <div v-if="canPlay">
-      <div v-for="rowsIndex in distribution.rows" :key="rowsIndex">
-        <coin
-          v-for="colsIndex in distribution.cols"
-          :class="{ 'ml-2': colsIndex !== 1}"
-          :ref="`coin${rowsIndex}${colsIndex}`"
-          :info="{col: colsIndex, row: rowsIndex, player: player}"
-          :key="colsIndex"
-          height="30px"
-          width="30px"
-          :received="receivedFromPreviousPlayer(rowsIndex, colsIndex)"
-          :moved="isMoved(rowsIndex, colsIndex)"
-          :canBePressed="canPressMoreCoins"
-          @selection="onCoinSelection(rowsIndex, colsIndex)"
-          @deselection="onCoinDeselection(rowsIndex, colsIndex)"
-        ></coin>
+  <div class="card h-100">
+    <div class="card-header">
+      <strong>{{ player.name }}</strong>
+      - Jugador #{{id+1}}
+    </div>
+    <div class="card-body">
+      <div v-if="canPlay">
+        <div v-for="rowsIndex in distribution.rows" :key="rowsIndex">
+          <coin
+            v-for="colsIndex in distribution.cols"
+            :class="{ 'ml-2': colsIndex !== 1}"
+            :ref="`coin${rowsIndex}${colsIndex}`"
+            :info="{col: colsIndex, row: rowsIndex, player: player}"
+            :key="colsIndex"
+            height="30px"
+            width="30px"
+            :received="receivedFromPreviousPlayer(rowsIndex, colsIndex)"
+            :moved="isMoved(rowsIndex, colsIndex)"
+            :canBePressed="canPressMoreCoins"
+            @selection="onCoinSelection(rowsIndex, colsIndex)"
+            @deselection="onCoinDeselection(rowsIndex, colsIndex)"
+          ></coin>
+        </div>
+      </div>
+      <div v-else>
+        <div class="text-center mt-5">
+          <div class="spinner-border text-warning" role="status">
+          </div>
+          <p>
+            Esperando monedas...
+          </p>
+        </div>
+      </div>
+      <div class="mt-3">
+        <button
+          class="btn btn-primary"
+          type="primary"
+          v-if="canPlay && !canPressMoreCoins"
+          @click="moveCoins"
+        >Mover lote</button>
       </div>
     </div>
-    <div v-else>
-      <p>Esperando Monedas...</p>
-    </div>
-    <p class="text-center">Jugador {{id}}</p>
-    <el-button type="primary" v-if="canPlay && !canPressMoreCoins" @click="moveCoins">Mover lote</el-button>
   </div>
 </template>
 
@@ -86,7 +101,6 @@ export default {
         coordinateY: colsIndex,
         type: "select"
       });
-
     },
 
     onCoinDeselection(rowsIndex, colsIndex) {
@@ -112,7 +126,6 @@ export default {
     },
 
     moveCoins() {
-
       this.$store.dispatch("socket_move_coins");
 
       this.movedCoins = this.movedCoins.concat(this.player.selectedCoins);
@@ -136,7 +149,7 @@ export default {
         coin => coin.row === rowsIndex && coin.col === colsIndex
       );
     }
-  },
+  }
 };
 </script>
 
