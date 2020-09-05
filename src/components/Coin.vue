@@ -1,8 +1,8 @@
 <template>
   <div
-    class="rounded-circle bg-warning coin border border-dark"
+    class="rounded-circle bg-warning coin border"
     @click="press"
-    :class="{ pressed: isPressed, moved: moved }"
+    :class="{ pressed: isPressed, moved: moved, }"
     v-if="!moved && received"
   ></div>
 </template>
@@ -51,15 +51,22 @@ export default {
 
 <style scoped lang="scss">
 .coin {
-  width: 30px;
-  height: 30px;
+  width: 33px;
+  height: 33px;
   display: inline-block;
   cursor: pointer;
+  border-color: #F44336 !important;
   transition: transform 0.5s;
+  &:not(.pressed){
+    background-image: url('../assets/img/dcoin.svg');
+    background-size: cover;
+  }
 }
 
 .pressed {
   transform: rotateY(180deg);
+  background-image: url('../assets/img/coin.svg');
+  background-size: cover;
   background-color: $main-color !important;
 }
 </style>
