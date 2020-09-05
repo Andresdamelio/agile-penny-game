@@ -15,7 +15,7 @@
           width="30px"
           :received="receivedFromPreviousPlayer(rowsIndex, colsIndex)"
           :moved="isMoved(rowsIndex, colsIndex)"
-          :can-be-pressed="canPressMoreCoins"
+          :canBePressed="canPressMoreCoins"
           @selection="onCoinSelection(rowsIndex, colsIndex)"
           @deselection="onCoinDeselection(rowsIndex, colsIndex)"
         ></coin>
