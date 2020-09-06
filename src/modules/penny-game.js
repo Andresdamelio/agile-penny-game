@@ -125,6 +125,10 @@ const pennyModule = {
       rootState.io.emit("moveCoins", { roomId: getters["getRoomId"] })
     },
 
+    socket_save_result: ({ rootState, getters }, { time, type}) => {
+      rootState.io.emit("saveResult", { roomId: getters["getRoomId"], time, type});
+    },
+
     get_room_by_id: ({ commit }, id) => {
       fetch(`${process.env.VUE_APP_URL}/room/${id}`)
         .then((resp) => resp.json())

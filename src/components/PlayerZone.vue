@@ -83,16 +83,16 @@ export default {
     onCoinSelection(rowsIndex, colsIndex) {
       if (!this.player.selectedCoins.length && !this.firstSelectionDone) {
         this.firstSelectionDone = true;
-        this.$emit("firstSelectionDone", this.player.id);
+        this.$emit("firstSelectionDone");
       }
 
-      /* const alreadySelected = this.player.selectedCoins.some(
+      const alreadySelected = this.player.selectedCoins.some(
         coin => coin.row === rowsIndex && coin.col === colsIndex
       );
 
       if (alreadySelected) {
         return;
-      } */
+      }
 
       this.$store.dispatch("socket_move_coin", {
         coordinateX: rowsIndex,
@@ -102,13 +102,13 @@ export default {
     },
 
     onCoinDeselection(rowsIndex, colsIndex) {
-      /* const selected = this.player.selectedCoins.findIndex(
+      const selected = this.player.selectedCoins.findIndex(
         coin => coin.row === rowsIndex && coin.col === colsIndex
       );
 
       if (!selected) {
         return;
-      } */
+      }
 
       this.$store.dispatch("socket_move_coin", {
         coordinateX: rowsIndex,

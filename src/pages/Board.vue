@@ -77,7 +77,8 @@ export default {
 
     isLastRound() {
       return (
-        this.configurationResult.actualRoundIndex === this.configurationResult.rounds.length - 1
+        this.configurationResult.actualRoundIndex ===
+        this.configurationResult.rounds.length - 1
       );
     }
   },
@@ -108,13 +109,15 @@ export default {
       const playerIndex = moveData.playerIndex;
       const movedCoins = moveData.movedCoins;
 
-      //this.players[playerIndex].movedCoins = movedCoins;
-
       if (movedCoins.length === this.configurationResult.coins) {
         /* Register time for the last movement of coins done by the user*/
-        this.results[this.configurationResult.actualRoundIndex][
+        /* this.results[this.configurationResult.actualRoundIndex][
           playerIndex
-        ].lastMovementDone = this.actualTime;
+        ].lastMovementDone = this.actualTime; */
+        this.$store.dispatch("socket_save_result", {
+          time: this.actualTime,
+          type: "finish"
+        });
       }
 
       if (
@@ -125,29 +128,26 @@ export default {
           this.$emit("endgame", { results: this.results });
           return;
         }
-
-        /* for (const player of this.players) {
-          player.movedCoins = [];
-        } */
-
       }
     },
     onTimeChange(timeData) {
       this.actualTime = timeData;
     },
-    onFirstSelectionDone(playerId) {
+
+    onFirstSelectionDone() {
       /* this.results[this.actualRoundIndex].push({
         round: this.actualRoundIndex,
         playerId,
         firstSelectionDone: this.actualTime,
         lastMovementDone: null
       }); */
-      console.log(playerId);
-      return true;
+      this.$store.dispatch("socket_save_result", {
+        time: this.actualTime,
+        type: "init"
+      });
     },
 
     stopPlayTimer() {
-
       this.$store.dispatch("socket_start_counter");
 
       if (this.currentDate == 0) {
