@@ -13,11 +13,11 @@
 
     <input type="hidden" :value="$store.state.pennyModule.magigLink" ref="magicLink" />
 
-    <h1 class="text-center">Ronda {{actualRoundIndex + 1}}</h1>
+    <h1 class="text-center">Ronda {{ configurationResult.actualRoundIndex + 1}}</h1>
 
     <p>
-      Deben mover lotes de {{this.configurationResult.rounds[actualRoundIndex].sizeLot}}
-      {{ configurationResult.rounds[actualRoundIndex].sizeLot > 1 ? "monedas" : "moneda"}} hasta haber movido todas las monedas de su lugar
+      Deben mover lotes de {{ configurationResult.rounds[configurationResult.actualRoundIndex].sizeLot}}
+      {{ configurationResult.rounds[configurationResult.actualRoundIndex].sizeLot > 1 ? "monedas" : "moneda"}} hasta haber movido todas las monedas de su lugar
     </p>
 
     <div class="row no-gutters">
@@ -33,7 +33,7 @@
           :player.sync="player"
           :previousPlayer="index !== 0 ? configurationResult.players[index - 1] : null"
           :totalCoins="configurationResult.coins"
-          :roundCoins="configurationResult.rounds[actualRoundIndex].sizeLot"
+          :roundCoins="configurationResult.rounds[configurationResult.actualRoundIndex].sizeLot"
           :distribution="distribution"
           @playerMoveCoins="onPlayerMoveCoins"
           @firstSelectionDone="onFirstSelectionDone"
@@ -61,7 +61,6 @@ export default {
       currentDate: 0,
       distribution: { rows: 5, cols: 4 },
       players: [],
-      actualRoundIndex: 0,
       actualTime: null,
       results: [],
       showModal: true,
@@ -78,7 +77,7 @@ export default {
 
     isLastRound() {
       return (
-        this.actualRoundIndex === this.configurationResult.rounds.length - 1
+        this.configurationResult.actualRoundIndex === this.configurationResult.rounds.length - 1
       );
     }
   },
@@ -113,7 +112,7 @@ export default {
 
       if (movedCoins.length === this.configurationResult.coins) {
         /* Register time for the last movement of coins done by the user*/
-        this.results[this.actualRoundIndex][
+        this.results[this.configurationResult.actualRoundIndex][
           playerIndex
         ].lastMovementDone = this.actualTime;
       }
@@ -131,9 +130,6 @@ export default {
           player.movedCoins = [];
         } */
 
-        this.actualRoundIndex++;
-        /* this.timer.restart = true;
-        this.timer.running = false; */
       }
     },
     onTimeChange(timeData) {

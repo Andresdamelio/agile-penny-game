@@ -59,6 +59,7 @@ const pennyModule = {
         size: state.room?.size ? state.room.size : 2,
         players: state.room?.players ? state.room.players : [],
         coins: 20,
+        actualRoundIndex: state.room?.actualRound ? state.room.actualRound : 0,
       };
     },
     isThereRoom: (state) => {
