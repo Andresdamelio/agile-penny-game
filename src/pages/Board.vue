@@ -2,10 +2,10 @@
   <div class="container my-5" v-if="isThereRoom">
     <button class="btn btn-primary timer" @click="stopPlayTimer">
       <timer
-        :running="timer.running"
+        :running.sync="running"
+        :restart.sync="restart"
         :currentDate.sync="currentDate"
-        :restart="timer.restart"
-        v-on:timeChange="onTimeChange"
+        @timeChange="onTimeChange"
       ></timer>
     </button>
 
@@ -62,11 +62,7 @@ export default {
       distribution: { rows: 5, cols: 4 },
       players: [],
       actualRoundIndex: 0,
-      timer: {
-        running: false,
-        restart: false,
-        actualTime: null
-      },
+      actualTime: null,
       results: [],
       showModal: true,
       currentPlayer: this.$store.getters["getCurrentPlayer"]
@@ -75,14 +71,16 @@ export default {
   computed: {
     ...mapGetters({
       isThereRoom: "isThereRoom",
-      configurationResult: "getGame"
+      configurationResult: "getGame",
+      running: "getTimerRunning",
+      restart: "getTimerRestart"
     }),
 
     isLastRound() {
       return (
         this.actualRoundIndex === this.configurationResult.rounds.length - 1
       );
-    },
+    }
   },
   components: {
     PlayerZone,
@@ -110,48 +108,51 @@ export default {
     onPlayerMoveCoins(moveData) {
       const playerIndex = moveData.playerIndex;
       const movedCoins = moveData.movedCoins;
-      this.players[playerIndex].movedCoins = movedCoins;
+
+      //this.players[playerIndex].movedCoins = movedCoins;
+
       if (movedCoins.length === this.configurationResult.coins) {
         /* Register time for the last movement of coins done by the user*/
         this.results[this.actualRoundIndex][
           playerIndex
-        ].lastMovementDone = this.timer.actualTime;
+        ].lastMovementDone = this.actualTime;
       }
+
       if (
         playerIndex === this.players.length - 1 &&
         movedCoins.length === this.configurationResult.coins
       ) {
         if (this.isLastRound) {
-          this.$emit("endgame", {
-            results: this.results
-          });
+          this.$emit("endgame", { results: this.results });
           return;
         }
-        for (const player of this.players) {
+
+        /* for (const player of this.players) {
           player.movedCoins = [];
-        }
+        } */
+
         this.actualRoundIndex++;
-        this.timer.restart = true;
-        this.timer.running = false;
+        /* this.timer.restart = true;
+        this.timer.running = false; */
       }
     },
     onTimeChange(timeData) {
-      this.timer.actualTime = timeData;
+      this.actualTime = timeData;
     },
     onFirstSelectionDone(playerId) {
       /* this.results[this.actualRoundIndex].push({
         round: this.actualRoundIndex,
         playerId,
-        firstSelectionDone: this.timer.actualTime,
+        firstSelectionDone: this.actualTime,
         lastMovementDone: null
       }); */
-      console.log(playerId)
-      return true
+      console.log(playerId);
+      return true;
     },
 
     stopPlayTimer() {
-      this.timer.restart = false;
-      this.timer.running = !this.timer.running;
+
+      this.$store.dispatch("socket_start_counter");
 
       if (this.currentDate == 0) {
         this.$store.dispatch("socket_init_round");
@@ -168,9 +169,6 @@ export default {
         movedCoins: []
       });
     }
-    /* for (let i = 0; i < this.configurationResult.rounds.length; i++) {
-      this.results.push([]);
-    } */
   }
 };
 </script>

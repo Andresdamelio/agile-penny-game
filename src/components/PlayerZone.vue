@@ -13,8 +13,6 @@
             :ref="`coin${rowsIndex}${colsIndex}`"
             :info="{col: colsIndex, row: rowsIndex, player: player}"
             :key="colsIndex"
-            height="30px"
-            width="30px"
             :received="receivedFromPreviousPlayer(rowsIndex, colsIndex)"
             :moved="isMoved(rowsIndex, colsIndex)"
             :canBePressed="canPressMoreCoins"
@@ -128,18 +126,14 @@ export default {
     moveCoins() {
       this.$store.dispatch("socket_move_coins");
 
-      this.movedCoins = this.movedCoins.concat(this.player.selectedCoins);
-
       this.$emit("playerMoveCoins", {
         movedCoins: this.player.movedCoins,
         playerIndex: this.id
       });
 
       if (this.player.movedCoins.length === this.totalCoins) {
-        this.movedCoins = [];
         this.firstSelectionDone = false;
       }
-      /* this.selectedCoins = []; */
     },
 
     receivedFromPreviousPlayer(rowsIndex, colsIndex) {

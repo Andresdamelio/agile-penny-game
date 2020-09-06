@@ -10,15 +10,11 @@
 <script>
 export default {
   name: "Coin",
-  props: ["height", "width", "received", "canBePressed", "moved", "info"],
+  props: ["received", "canBePressed", "moved", "info"],
   data() {
     return {
       isPressed: false
     };
-  },
-  mounted() {
-    /* this.$el.style.width = this.width;
-    this.$el.style.height = this.height; */
   },
   computed: {
     isCurrentPlayer() {

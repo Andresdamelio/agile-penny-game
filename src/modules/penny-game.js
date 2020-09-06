@@ -5,7 +5,9 @@ const pennyModule = {
     magigLink: null,
     isThereRoom: false,
     currentPlayer: null,
-    moveCoin: {}
+    moveCoin: {},
+    timerRunning: false,
+    timerRestart: false
   },
   mutations: {
     ADD_ROOM: (state, room) => {
@@ -21,8 +23,8 @@ const pennyModule = {
     SET_CURRENT_PLAYER: (state, id) => {
       state.currentPlayer = id;
     },
-    SOCKET_INIT_ROUND: (state, actualRound) => {
-      console.log("Ha iniciado una ronda", state, actualRound);
+    SOCKET_INIT_ROUND: (state, room) => {
+      state.room = room;
     },
     SOCKET_NEW_PLAYER: (state, { room }) => {
       state.room = room;
@@ -36,6 +38,15 @@ const pennyModule = {
       const playerIndex = state.room.players.findIndex( mPlayer => mPlayer.id === player.id );
       Object.assign(state.room.players[playerIndex], player);
 
+    },
+    SOCKET_START_COUNTER: (state) => {
+      console.log("Iniciando contador")
+      state.timerRestart = false;
+      state.timerRunning = true;
+    },
+    SOCKET_STOP_COUNTER: (state) => {
+      state.timerRunning = false;
+      state.timerRestart = true;
     },
   },
   getters: {
@@ -56,6 +67,12 @@ const pennyModule = {
     getCurrentPlayer: (state) => {
       return state.currentPlayer;
     },
+    getTimerRunning: ( state ) => {
+      return state.timerRunning
+    },
+    getTimerRestart: ( state ) => {
+      return state.timerRestart
+    }
   },
   actions: {
     socket_new_room: ({ rootState, commit, dispatch }, { name, players }) => {
@@ -69,6 +86,10 @@ const pennyModule = {
           console.error("Algo salió mal, no se pudo crear la sala");
         }
       });
+    },
+
+    socket_init_round: ({ rootState, getters }) => {
+      rootState.io.emit("initRound", getters["getRoomId"]);
     },
 
     socket_join_room: ({ rootState, commit }, { name, roomId }) => {
@@ -86,8 +107,8 @@ const pennyModule = {
       });
     },
 
-    socket_init_round: ({ rootState, state }) => {
-      rootState.io.emit("initRound", state.room.id);
+    socket_start_counter: ({ rootState, getters }) => {
+      rootState.io.emit("startCounter", getters["getRoomId"])
     },
 
     socket_move_coin: ({ rootState, getters }, { coordinateX, coordinateY, type }) => {
