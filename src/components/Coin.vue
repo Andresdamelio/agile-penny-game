@@ -2,7 +2,7 @@
   <div
     class="rounded-circle bg-warning coin border"
     @click="press"
-    :class="{ pressed: isPressed, moved: moved, }"
+    :class="{ pressed: isPressed, moved: moved,  'click-disabled': !isCurrentPlayer}"
     v-if="!moved && received"
   ></div>
 </template>
@@ -20,9 +20,13 @@ export default {
     /* this.$el.style.width = this.width;
     this.$el.style.height = this.height; */
   },
+  computed: {
+    isCurrentPlayer() {
+      return this.info.player.id === this.$store.state.pennyModule.currentPlayer;
+    }
+  },
   methods: {
     press() {
-      console.log("pressing");
       if (this.isPressed) {
         this.$emit("deselection");
         this.isPressed = false;
@@ -78,5 +82,9 @@ export default {
   background-image: url("../assets/img/coin.svg");
   background-size: cover;
   background-color: $main-color !important;
+}
+
+.click-disabled {
+  pointer-events: none;
 }
 </style>

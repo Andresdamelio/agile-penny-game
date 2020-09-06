@@ -36,7 +36,7 @@
         <button
           class="btn btn-primary"
           type="primary"
-          v-if="canPlay && !canPressMoreCoins"
+          v-if="canPlay && !canPressMoreCoins && player.id === $store.state.pennyModule.currentPlayer"
           @click="moveCoins"
         >Mover lote</button>
       </div>
@@ -129,8 +129,9 @@ export default {
       this.$store.dispatch("socket_move_coins");
 
       this.movedCoins = this.movedCoins.concat(this.player.selectedCoins);
+
       this.$emit("playerMoveCoins", {
-        movedCoins: this.movedCoins,
+        movedCoins: this.player.movedCoins,
         playerIndex: this.id
       });
 
