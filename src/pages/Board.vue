@@ -60,7 +60,6 @@ export default {
     return {
       currentDate: 0,
       distribution: { rows: 5, cols: 4 },
-      players: [],
       actualTime: null,
       results: [],
       showModal: true,
@@ -105,15 +104,11 @@ export default {
       });
     },
 
-    onPlayerMoveCoins(moveData) {
-      const playerIndex = moveData.playerIndex;
-      const movedCoins = moveData.movedCoins;
+    onPlayerMoveCoins({ movedCoins, selectedCoins, playerIndex }) {
 
-      if (movedCoins.length === this.configurationResult.coins) {
-        /* Register time for the last movement of coins done by the user*/
-        /* this.results[this.configurationResult.actualRoundIndex][
-          playerIndex
-        ].lastMovementDone = this.actualTime; */
+      let coins = [...movedCoins, ...selectedCoins];
+
+      if (coins.length === this.configurationResult.coins) {
         this.$store.dispatch("socket_save_result", {
           time: this.actualTime,
           type: "finish"
@@ -121,8 +116,8 @@ export default {
       }
 
       if (
-        playerIndex === this.players.length - 1 &&
-        movedCoins.length === this.configurationResult.coins
+        playerIndex === this.configurationResult.players.length - 1 &&
+        coins.length === this.configurationResult.coins
       ) {
         if (this.isLastRound) {
           this.$emit("endgame", { results: this.results });
@@ -130,17 +125,12 @@ export default {
         }
       }
     },
+
     onTimeChange(timeData) {
       this.actualTime = timeData;
     },
 
     onFirstSelectionDone() {
-      /* this.results[this.actualRoundIndex].push({
-        round: this.actualRoundIndex,
-        playerId,
-        firstSelectionDone: this.actualTime,
-        lastMovementDone: null
-      }); */
       this.$store.dispatch("socket_save_result", {
         time: this.actualTime,
         type: "init"
@@ -158,14 +148,6 @@ export default {
   beforeCreate() {
     this.$store.dispatch("get_room_by_id", this.$route.params.id);
   },
-  created() {
-    for (let i = 0; i < this.configurationResult.players; i++) {
-      this.players.push({
-        id: i,
-        movedCoins: []
-      });
-    }
-  }
 };
 </script>
 

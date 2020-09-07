@@ -123,12 +123,13 @@ export default {
       );
     },
 
-    moveCoins() {
-      this.$store.dispatch("socket_move_coins");
+    async moveCoins() {
+      await this.$store.dispatch("socket_move_coins");
 
       this.$emit("playerMoveCoins", {
+        playerIndex: this.id,
+        selectedCoins: this.player.selectedCoins,
         movedCoins: this.player.movedCoins,
-        playerIndex: this.id
       });
 
       if (this.player.movedCoins.length === this.totalCoins) {
