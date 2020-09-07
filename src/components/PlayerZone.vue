@@ -57,7 +57,7 @@ export default {
     "player",
     "previousPlayer",
     "totalCoins",
-    "roundCoins"
+    "roundCoins",
   ],
   data() {
     return {

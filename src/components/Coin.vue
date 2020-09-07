@@ -2,12 +2,15 @@
   <div
     class="rounded-circle bg-warning coin border"
     @click="press"
-    :class="{ pressed: isPressed, moved: moved,  'click-disabled': !isCurrentPlayer}"
+    :class="{ pressed: isPressed, moved: moved,  'click-disabled': !isCurrentPlayer && !running}"
     v-if="!moved && received"
   ></div>
 </template>
 
 <script>
+
+import { mapGetters } from "vuex";
+
 export default {
   name: "Coin",
   props: ["received", "canBePressed", "moved", "info"],
@@ -17,6 +20,9 @@ export default {
     };
   },
   computed: {
+    ...mapGetters({
+      running: "getTimerRunning",
+    }),
     isCurrentPlayer() {
       return this.info.player.id === this.$store.state.pennyModule.currentPlayer;
     }
