@@ -90,8 +90,6 @@ export default {
         coin => coin.row === rowsIndex && coin.col === colsIndex
       );
 
-      console.log("Esta seleccionada", alreadySelected)
-
       if (alreadySelected) {
         return;
       }
@@ -107,8 +105,6 @@ export default {
       const selected = this.player.selectedCoins.some(
         coin => coin.row === rowsIndex && coin.col === colsIndex
       );
-
-      console.log("Puede ser deseleccionada", selected)
 
       if (!selected) {
         return;

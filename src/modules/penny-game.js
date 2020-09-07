@@ -3,6 +3,7 @@ const pennyModule = {
     rooms: [],
     room: null,
     magigLink: null,
+    gameFinish: false,
     isThereRoom: false,
     currentPlayer: null,
     moveCoin: {},
@@ -40,7 +41,6 @@ const pennyModule = {
 
     },
     SOCKET_START_COUNTER: (state) => {
-      console.log("Iniciando contador")
       state.timerRestart = false;
       state.timerRunning = true;
     },
@@ -48,6 +48,9 @@ const pennyModule = {
       state.timerRunning = false;
       state.timerRestart = true;
     },
+    SOCKET_GAME_FINISHED: ( state ) => {
+      state.gameFinish = true;
+    }
   },
   getters: {
     getRoomId: (state) => {
@@ -60,6 +63,7 @@ const pennyModule = {
         players: state.room?.players ? state.room.players : [],
         coins: 20,
         actualRoundIndex: state.room?.actualRound ? state.room.actualRound : 0,
+        isFinished: state.gameFinish
       };
     },
     isThereRoom: (state) => {
@@ -127,6 +131,10 @@ const pennyModule = {
 
     socket_save_result: ({ rootState, getters }, { time, type}) => {
       rootState.io.emit("saveResult", { roomId: getters["getRoomId"], time, type});
+    },
+
+    socket_end_game: ({ rootState, getters }) => {
+      rootState.io.emit("endGame", { roomId: getters["getRoomId"] });
     },
 
     get_room_by_id: ({ commit }, id) => {

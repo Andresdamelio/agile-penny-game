@@ -1,5 +1,5 @@
 <template>
-  <div class="container my-5" v-if="isThereRoom">
+  <div class="container my-5" v-if="isThereRoom && !configurationGame.isFinished">
     <button class="btn btn-primary timer" @click="stopPlayTimer">
       <timer
         :running.sync="running"
@@ -13,27 +13,23 @@
 
     <input type="hidden" :value="$store.state.pennyModule.magigLink" ref="magicLink" />
 
-    <h1 class="text-center">Ronda {{ configurationResult.actualRoundIndex + 1}}</h1>
+    <h1 class="text-center">Ronda {{ configurationGame.actualRoundIndex + 1}}</h1>
 
     <p>
-      Deben mover lotes de {{ configurationResult.rounds[configurationResult.actualRoundIndex].sizeLot}}
-      {{ configurationResult.rounds[configurationResult.actualRoundIndex].sizeLot > 1 ? "monedas" : "moneda"}} hasta haber movido todas las monedas de su lugar
+      Deben mover lotes de {{ configurationGame.rounds[configurationGame.actualRoundIndex].sizeLot}}
+      {{ configurationGame.rounds[configurationGame.actualRoundIndex].sizeLot > 1 ? "monedas" : "moneda"}} hasta haber movido todas las monedas de su lugar
     </p>
 
     <div class="row no-gutters">
-      <div
-        class="col-12 col-sm"
-        v-for="(player, index) in configurationResult.players"
-        :key="index"
-      >
+      <div class="col-12 col-sm" v-for="(player, index) in configurationGame.players" :key="index">
         <player-zone
           :id="index"
           :start="index === 0"
-          :end="index === configurationResult.players.length - 1"
+          :end="index === configurationGame.players.length - 1"
           :player.sync="player"
-          :previousPlayer="index !== 0 ? configurationResult.players[index - 1] : null"
-          :totalCoins="configurationResult.coins"
-          :roundCoins="configurationResult.rounds[configurationResult.actualRoundIndex].sizeLot"
+          :previousPlayer="index !== 0 ? configurationGame.players[index - 1] : null"
+          :totalCoins="configurationGame.coins"
+          :roundCoins="configurationGame.rounds[configurationGame.actualRoundIndex].sizeLot"
           :distribution="distribution"
           @playerMoveCoins="onPlayerMoveCoins"
           @firstSelectionDone="onFirstSelectionDone"
@@ -45,6 +41,9 @@
         <form-player :showModal.sync="showModal"></form-player>
       </transition>
     </div>
+  </div>
+  <div v-else>
+    <button @click="viewResults" class="btn btn-primary">Ver resultados</button>
   </div>
 </template>
 
@@ -61,7 +60,6 @@ export default {
       currentDate: 0,
       distribution: { rows: 5, cols: 4 },
       actualTime: null,
-      results: [],
       showModal: true,
       currentPlayer: this.$store.getters["getCurrentPlayer"]
     };
@@ -69,24 +67,18 @@ export default {
   computed: {
     ...mapGetters({
       isThereRoom: "isThereRoom",
-      configurationResult: "getGame",
+      configurationGame: "getGame",
       running: "getTimerRunning",
       restart: "getTimerRestart"
     }),
 
     isLastRound() {
       return (
-        this.configurationResult.actualRoundIndex ===
-        this.configurationResult.rounds.length - 1
+        this.configurationGame.actualRoundIndex ===
+        this.configurationGame.rounds.length - 1
       );
     }
   },
-  components: {
-    PlayerZone,
-    Timer,
-    FormPlayer
-  },
-
   methods: {
     copy() {
       let magicLink = this.$refs.magicLink;
@@ -105,10 +97,9 @@ export default {
     },
 
     onPlayerMoveCoins({ movedCoins, selectedCoins, playerIndex }) {
-
       let coins = [...movedCoins, ...selectedCoins];
 
-      if (coins.length === this.configurationResult.coins) {
+      if (coins.length === this.configurationGame.coins) {
         this.$store.dispatch("socket_save_result", {
           time: this.actualTime,
           type: "finish"
@@ -116,14 +107,20 @@ export default {
       }
 
       if (
-        playerIndex === this.configurationResult.players.length - 1 &&
-        coins.length === this.configurationResult.coins
+        playerIndex === this.configurationGame.players.length - 1 &&
+        coins.length === this.configurationGame.coins
       ) {
         if (this.isLastRound) {
-          this.$emit("endgame", { results: this.results });
-          return;
+          this.$store.dispatch("socket_end_game");
         }
       }
+    },
+
+    viewResults() {
+      this.$router.push({
+        name: "result",
+        params: { id: this.$store.getters["getRoomId"] }
+      });
     },
 
     onTimeChange(timeData) {
@@ -145,9 +142,14 @@ export default {
       }
     }
   },
+  components: {
+    PlayerZone,
+    Timer,
+    FormPlayer
+  },
   beforeCreate() {
     this.$store.dispatch("get_room_by_id", this.$route.params.id);
-  },
+  }
 };
 </script>
 
