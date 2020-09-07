@@ -126,13 +126,13 @@ export default {
     async moveCoins() {
       await this.$store.dispatch("socket_move_coins");
 
+      let total = [...this.player.selectedCoins, ...this.player.movedCoins];
+
       this.$emit("playerMoveCoins", {
         playerIndex: this.id,
-        selectedCoins: this.player.selectedCoins,
-        movedCoins: this.player.movedCoins,
+        movedCoins: total,
       });
-
-      if (this.player.movedCoins.length === this.totalCoins) {
+      if (total.length === this.totalCoins) {
         this.firstSelectionDone = false;
       }
     },

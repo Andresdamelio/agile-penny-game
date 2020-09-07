@@ -1,14 +1,8 @@
 <template>
-  <div class="container-fluid">
+  <div class="container-fluid" v-if="resume">
     <div class="flex justify-content-center">
       <h3 class="text-center">Resultados</h3>
     </div>
-    <pre>
-      Results
-      {{
-        $store.state.pennyModule.gameResults
-      }}
-    </pre>
     <div class="container">
       <div class="row mt-5" v-for="(round, index) in resume.tableResults" :key="index">
         <h5
@@ -94,7 +88,7 @@ export default {
   props: ["results"],
   data() {
     return {
-      resume: {
+      resume2: {
         tableResults: [
           {
             number: 1,
@@ -207,6 +201,11 @@ export default {
   components: {
     BarChart,
     LineChart
+  },
+  computed: {
+    resume() {
+      return this. $store.state.pennyModule.gameResults;
+    }
   },
   beforeCreate() {
     this.$store.dispatch("get_results_by_room", this.$route.params.id);

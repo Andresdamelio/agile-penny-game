@@ -20,7 +20,6 @@ export default {
     }
   },
   mounted () {
-    console.log("Mounted",this.labels)
     let config = {
       labels: this.labels,
       datasets: this.datasets

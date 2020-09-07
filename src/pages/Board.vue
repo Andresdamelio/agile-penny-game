@@ -96,10 +96,9 @@ export default {
       });
     },
 
-    onPlayerMoveCoins({ movedCoins, selectedCoins, playerIndex }) {
-      let coins = [...movedCoins, ...selectedCoins];
+    onPlayerMoveCoins({ movedCoins, playerIndex }) {
 
-      if (coins.length === this.configurationGame.coins) {
+      if (movedCoins.length === this.configurationGame.coins) {
         this.$store.dispatch("socket_save_result", {
           time: this.actualTime,
           type: "finish"
@@ -108,7 +107,7 @@ export default {
 
       if (
         playerIndex === this.configurationGame.players.length - 1 &&
-        coins.length === this.configurationGame.coins
+        movedCoins.length === this.configurationGame.coins
       ) {
         if (this.isLastRound) {
           this.$store.dispatch("socket_end_game");

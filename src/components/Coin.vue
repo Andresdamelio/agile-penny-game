@@ -49,7 +49,6 @@ export default {
           coin.col === this.info.col &&
           coin.playerId === this.info.player.id
         ) {
-          console.log("COIN", coin, "Info", this.info);
           this.press();
         }
       }
