@@ -23,7 +23,7 @@
               <th scope="row">{{index+1}}</th>
               <td>{{res.player.name}}</td>
               <td>{{res.initWait}}</td>
-              <td>{{res.delay}}</td>
+              <td>{{res.receptionTime}}</td>
               <td>{{res.deliveryTerm}}</td>
             </tr>
           </tbody>
