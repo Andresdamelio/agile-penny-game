@@ -7,7 +7,8 @@ const pennyModule = {
     currentPlayer: null,
     moveCoin: {},
     timerRunning: false,
-    timerRestart: false
+    timerRestart: false,
+    gameResults: null
   },
   mutations: {
     ADD_ROOM: (state, room) => {
@@ -22,6 +23,9 @@ const pennyModule = {
     },
     SET_CURRENT_PLAYER: (state, id) => {
       state.currentPlayer = id;
+    },
+    SET_RESULTS: (state, resume) => {
+      state.gameResults = resume;
     },
     SOCKET_INIT_ROUND: (state, room) => {
       state.room = room;
@@ -135,6 +139,18 @@ const pennyModule = {
         .then((resp) => {
           if (resp.ok) {
             commit("SET_ROOM", resp.room);
+          } else {
+            console.log("Algo salió mal, recargue la página");
+          }
+        });
+    },
+
+    get_results_by_room: ({ commit }, roomId) => {
+      fetch(`${process.env.VUE_APP_URL}/results/${roomId}`)
+        .then((resp) => resp.json())
+        .then((resp) => {
+          if (resp.ok) {
+            commit("SET_RESULTS", resp.resume);
           } else {
             console.log("Algo salió mal, recargue la página");
           }
