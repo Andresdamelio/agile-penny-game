@@ -26,11 +26,10 @@ export default {
       if (this.isPressed) {
         this.$emit("deselection");
         this.isPressed = false;
+        return;
       } else {
         if (!this.canBePressed) {
-          if (
-            this.info.player.selectedCoins.some(coin => coin.row === this.info.row && coin.col === this.info.col)
-          ) {
+          if (this.info.player.selectedCoins.some(coin => coin.row === this.info.row && coin.col === this.info.col)) {
             this.$emit("selection");
             this.isPressed = true;
           }
