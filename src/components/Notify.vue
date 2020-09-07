@@ -11,11 +11,6 @@
 
 <script>
 export default {
-  methods: {
-    closeNotify() {
-      console.log("Cerra");
-    }
-  },
   computed: {
     notify() {
       return this.$store.getters["getNotify"];
