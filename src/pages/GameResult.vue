@@ -43,9 +43,7 @@
             <tr>
               <th scope="col">#</th>
               <th scope="col">Jugador</th>
-              <th scope="col">Lotes de 20</th>
-              <th scope="col">Lotes de 10</th>
-              <th scope="col">Lotes de 5</th>
+              <th v-for="(res, index) in resume.termVsCost.chartLabels" :key="index" scope="col">{{ res }}</th>
             </tr>
           </thead>
           <tbody>
