@@ -2,7 +2,7 @@
   <div
     class="rounded-circle bg-warning coin border"
     @click="press"
-    :class="{ pressed: isPressed, moved: moved,  'click-disabled': !isCurrentPlayer && !running}"
+    :class="{ pressed: isPressed, moved: moved,  'click-disabled': !isCurrentPlayer || !running}"
     v-if="!moved && received"
   ></div>
 </template>
