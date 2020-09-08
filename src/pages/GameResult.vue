@@ -83,7 +83,7 @@ import BarChart from "../components/charts/BarChart";
 import LineChart from "../components/charts/LineChart";
 export default {
   name: "GameResult",
-  props: ["results"],
+  props: ["id"],
   data() {
     return {
       resume2: {

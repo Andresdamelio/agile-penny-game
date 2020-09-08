@@ -1,49 +1,57 @@
 <template>
-  <div class="container my-5" v-if="isThereRoom && !configurationGame.isFinished">
-    <button class="btn btn-primary timer" @click="stopPlayTimer">
-      <timer
-        :running.sync="running"
-        :restart.sync="restart"
-        :currentDate.sync="currentDate"
-        @timeChange="onTimeChange"
-      ></timer>
-    </button>
+  <div class="container my-5" v-if="isThereRoom && configurationGame">
+    <game-result v-if="configurationGame.actualRoundIndex > 3" />
+    <template v-else>
+      <button class="btn btn-primary timer" @click="stopPlayTimer">
+        <timer
+          :running.sync="running"
+          :restart.sync="restart"
+          :currentDate.sync="currentDate"
+          @timeChange="onTimeChange"
+        ></timer>
+      </button>
 
-    <button class="ml-2 btn btn-primary magic-link" @click="copy">Copiar link</button>
+      <button class="ml-2 btn btn-primary magic-link" @click="copy">Copiar link</button>
 
-    <input type="hidden" :value="$store.state.pennyModule.magigLink" ref="magicLink" />
+      <input type="hidden" :value="$store.state.pennyModule.magigLink" ref="magicLink" />
 
-    <h1 class="text-center">Ronda {{ configurationGame.actualRoundIndex + 1}}</h1>
+      <h1 class="text-center">Ronda {{ configurationGame.actualRoundIndex + 1}}</h1>
 
-    <p>
-      Deben mover lotes de {{ configurationGame.rounds[configurationGame.actualRoundIndex].sizeLot}}
-      {{ configurationGame.rounds[configurationGame.actualRoundIndex].sizeLot > 1 ? "monedas" : "moneda"}} hasta haber movido todas las monedas de su lugar
-    </p>
+      <p>
+        Deben mover lotes de {{ configurationGame.rounds[configurationGame.actualRoundIndex].sizeLot}}
+        {{ configurationGame.rounds[configurationGame.actualRoundIndex].sizeLot > 1 ? "monedas" : "moneda"}} hasta haber movido todas las monedas de su lugar
+      </p>
 
-    <div class="row no-gutters">
-      <div class="col-12 col-sm" v-for="(player, index) in configurationGame.players" :key="index">
-        <player-zone
-          :id="index"
-          :start="index === 0"
-          :end="index === configurationGame.players.length - 1"
-          :player.sync="player"
-          :previousPlayer="index !== 0 ? configurationGame.players[index - 1] : null"
-          :totalCoins="configurationGame.coins"
-          :roundCoins="configurationGame.rounds[configurationGame.actualRoundIndex].sizeLot"
-          :distribution="distribution"
-          @playerMoveCoins="onPlayerMoveCoins"
-          @firstSelectionDone="onFirstSelectionDone"
-        ></player-zone>
+      <div class="row no-gutters">
+        <div
+          class="col-12 col-sm"
+          v-for="(player, index) in configurationGame.players"
+          :key="index"
+        >
+          <player-zone
+            :id="index"
+            :start="index === 0"
+            :end="index === configurationGame.players.length - 1"
+            :player.sync="player"
+            :previousPlayer="index !== 0 ? configurationGame.players[index - 1] : null"
+            :totalCoins="configurationGame.coins"
+            :roundCoins="configurationGame.rounds[configurationGame.actualRoundIndex].sizeLot"
+            :distribution="distribution"
+            @playerMoveCoins="onPlayerMoveCoins"
+            @firstSelectionDone="onFirstSelectionDone"
+          ></player-zone>
+        </div>
       </div>
-    </div>
-    <div v-if="showModal && !currentPlayer">
-      <transition name="modal">
-        <form-player :showModal.sync="showModal"></form-player>
-      </transition>
-    </div>
-  </div>
-  <div v-else>
-    <button @click="viewResults" class="btn btn-primary">Ver resultados</button>
+      <div v-if="showModal && !currentPlayer">
+        <transition name="modal">
+          <form-player
+            v-if="configurationGame.players.length < configurationGame.size"
+            :showModal.sync="showModal"
+          ></form-player>
+          <modal-message title="Sala llena" message="Esta sala se encuentra llena, para jugar ingrese a otra sala, o cree una nueva" buttonText="Volver al incio" :showModal.sync="showModal"/>
+        </transition>
+      </div>
+    </template>
   </div>
 </template>
 
@@ -52,6 +60,8 @@ import { mapGetters } from "vuex";
 import PlayerZone from "../components/PlayerZone";
 import Timer from "@/components/Timer";
 import FormPlayer from "@/components/FormPlayer";
+import ModalMessage from "@/components/Modal";
+import GameResult from "./GameResult";
 
 export default {
   name: "Board",
@@ -97,7 +107,6 @@ export default {
     },
 
     onPlayerMoveCoins({ movedCoins, playerIndex }) {
-
       if (movedCoins.length === this.configurationGame.coins) {
         this.$store.dispatch("socket_save_result", {
           time: this.actualTime,
@@ -144,7 +153,9 @@ export default {
   components: {
     PlayerZone,
     Timer,
-    FormPlayer
+    FormPlayer,
+    GameResult,
+    ModalMessage,
   },
   beforeCreate() {
     this.$store.dispatch("get_room_by_id", this.$route.params.id);

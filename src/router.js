@@ -14,11 +14,6 @@ const routes = [
     name: "room",
     component: () => import("@/pages/Board"),
   },
-  {
-    path: "/game-result/:id",
-    name: "result",
-    component: () => import("@/pages/GameResult"),
-  },
 ];
 
 const router = new Router({
