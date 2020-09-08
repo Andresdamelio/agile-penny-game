@@ -41,7 +41,7 @@ const store = new Vuex.Store({
 // Socket server connection
 Vue.use(
   new VueSocketIo({
-    debug: true,
+    debug: false,
     connection: process.env.VUE_APP_URL,
     vuex: {
       store,

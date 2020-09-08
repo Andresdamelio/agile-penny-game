@@ -4,16 +4,17 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">Ingresar</h5>
-            <button type="button" class="close" @click="close">
+            <h2 class="modal-title">Ingresar</h2>
+            <button type="button" class="close" @click="close" aria-label="close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <div class="modal-body">
             <p>Identifíquese para participar en el juego</p>
             <div class="form-group">
-              <label for="numberPlayers">Nombre</label>
+              <label for="namePlayer">Nombre</label>
               <input
+                id="namePlayer"
                 type="text"
                 class="form-control"
                 v-model="name"

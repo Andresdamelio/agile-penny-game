@@ -29,8 +29,9 @@
           </div>
           <div class="card-body" v-if="!rounds_generated">
             <div class="form-group">
-              <label for="numberPlayers">Nombre</label>
+              <label for="namePlayer">Nombre</label>
               <input
+                id="namePlayer"
                 type="text"
                 class="form-control"
                 v-model="name"
