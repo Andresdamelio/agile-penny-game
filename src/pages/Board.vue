@@ -10,6 +10,11 @@
           @timeChange="onTimeChange"
         ></timer>
       </button>
+      <button
+        class="ml-2 btn btn-primary"
+        v-if="!running && configurationGame.actualRoundIndex == 0"
+        @click="createAutoPlayers"
+      >Jugar con la computadora</button>
 
       <button class="ml-2 btn btn-primary magic-link" @click="copy">Copiar link</button>
 
@@ -44,11 +49,18 @@
       </div>
       <div v-if="showModal && !currentPlayer">
         <transition name="modal">
-          <form-player
-            v-if="configurationGame.players.length < configurationGame.size"
-            :showModal.sync="showModal"
-          ></form-player>
-          <modal-message title="Sala llena" message="Esta sala se encuentra llena, para jugar ingrese a otra sala, o cree una nueva" buttonText="Volver al incio" :showModal.sync="showModal"/>
+          <template>
+            <form-player
+              v-if="configurationGame.players.length < configurationGame.size"
+              :showModal.sync="showModal"
+            ></form-player>
+            <modal-message
+              title="Sala llena"
+              message="Esta sala se encuentra llena, para jugar ingrese a otra sala, o cree una nueva"
+              buttonText="Volver al incio"
+              :showModal.sync="showModal"
+            />
+          </template>
         </transition>
       </div>
     </template>
@@ -148,6 +160,10 @@ export default {
       if (this.currentDate == 0) {
         this.$store.dispatch("socket_init_round");
       }
+    },
+
+    createAutoPlayers() {
+      this.$store.dispatch("socket_create_auto_players");
     }
   },
   components: {
@@ -155,7 +171,7 @@ export default {
     Timer,
     FormPlayer,
     GameResult,
-    ModalMessage,
+    ModalMessage
   },
   beforeCreate() {
     this.$store.dispatch("get_room_by_id", this.$route.params.id);

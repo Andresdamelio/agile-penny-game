@@ -116,6 +116,10 @@ const pennyModule = {
       });
     },
 
+    socket_create_auto_players: ({ rootState, getters }) => {
+      rootState.io.emit("createAutoPlayers", { roomId: getters["getRoomId"] });
+    },
+
     socket_start_counter: ({ rootState, getters }) => {
       rootState.io.emit("startCounter", getters["getRoomId"])
     },

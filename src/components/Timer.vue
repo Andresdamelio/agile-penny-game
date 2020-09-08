@@ -1,10 +1,10 @@
 <template>
   <div>
     <p
-      v-if="running || (!running && !currentDate)"
+      v-if="running"
       class="mb-0"
     >{{hours | formatTime}}:{{minutes | formatTime}}:{{seconds |formatTime}}</p>
-    <p v-else-if="currentDate !== 0" class="mb-0">Pausado</p>
+    <p v-else class="mb-0">Comenzar</p>
   </div>
 </template>
 
