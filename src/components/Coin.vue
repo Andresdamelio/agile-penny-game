@@ -81,7 +81,7 @@ export default {
   transform: rotateY(180deg);
   background-image: url("../assets/img/coin.svg");
   background-size: cover;
-  background-color: $main-color !important;
+  background-color: #FF5722 !important;
 }
 
 .click-disabled {

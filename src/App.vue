@@ -27,7 +27,6 @@ export default {
 
 <style lang="scss">
   @import "~bootstrap/dist/css/bootstrap.css";
-  @import "./assets/global_variables.scss";
 
   #app {
     height: 100%;
