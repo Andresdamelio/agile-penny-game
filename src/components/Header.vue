@@ -9,9 +9,8 @@
     </div>
     </router-link>
     <ul class="nav justify-content-center justify-content-sm-start">
-      <li class="nav-item">Inicio</li>
-      <li class="nav-item">Mis salas</li>
-      <li class="nav-item">Partidas</li>
+      <router-link to="/"><li class="nav-item">Inicio</li></router-link>
+      <router-link to="/rooms"><li class="nav-item">Salas</li></router-link>
     </ul>
   </header>
 </template>
@@ -37,9 +36,14 @@ export default {
   li {
     padding: 0 10px;
   }
-  a:hover {
-    text-decoration: none;
+  a{
+    color: #333;
+    &:hover {
+      text-decoration: none;
+      color: #e64a19;
+    }
   }
+    
 }
 .icon-header {
   width: 30px;
