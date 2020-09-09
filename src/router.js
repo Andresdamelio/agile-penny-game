@@ -14,6 +14,11 @@ const routes = [
     name: "room",
     component: () => import("@/pages/Board"),
   },
+  {
+    path: "/rooms",
+    name: "room",
+    component: () => import("@/pages/Rooms"),
+  },
 ];
 
 const router = new Router({
