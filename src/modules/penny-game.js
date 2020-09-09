@@ -1,15 +1,16 @@
 const pennyModule = {
   state: {
     rooms: [],
+    moveCoin: {},
     room: null,
     magigLink: null,
+    currentPlayer: null,
+    gameResults: null,
     gameFinish: false,
     isThereRoom: false,
-    currentPlayer: null,
-    moveCoin: {},
     timerRunning: false,
     timerRestart: false,
-    gameResults: null
+    movingAutoPlayer: {player: null, status: false},
   },
   mutations: {
     ADD_ROOM: (state, room) => {
@@ -54,6 +55,9 @@ const pennyModule = {
     },
     SOCKET_GAME_FINISHED: ( state ) => {
       state.gameFinish = true;
+    },
+    SOCKET_MOVING_AUTO_PLAYER: (state, status) => {
+      state.movingAutoPlayer = status;
     }
   },
   getters: {
@@ -137,8 +141,8 @@ const pennyModule = {
       rootState.io.emit("moveCoins", { roomId: getters["getRoomId"] })
     },
 
-    socket_save_result: ({ rootState, getters }, { time, type}) => {
-      rootState.io.emit("saveResult", { roomId: getters["getRoomId"], time, type});
+    socket_save_result: ({ rootState, getters }, { time, type, id}) => {
+      rootState.io.emit("saveResult", { roomId: getters["getRoomId"], time, type, id });
     },
 
     socket_end_game: ({ rootState, getters }) => {

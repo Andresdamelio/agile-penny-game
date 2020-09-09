@@ -122,7 +122,8 @@ export default {
       if (movedCoins.length === this.configurationGame.coins) {
         this.$store.dispatch("socket_save_result", {
           time: this.actualTime,
-          type: "finish"
+          type: "finish",
+          id: playerIndex
         });
       }
 
@@ -147,10 +148,11 @@ export default {
       this.actualTime = timeData;
     },
 
-    onFirstSelectionDone() {
+    onFirstSelectionDone(id) {
       this.$store.dispatch("socket_save_result", {
         time: this.actualTime,
-        type: "init"
+        type: "init",
+        id: id
       });
     },
 

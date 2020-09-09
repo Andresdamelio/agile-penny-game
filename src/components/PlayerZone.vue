@@ -23,11 +23,8 @@
       </div>
       <div v-else>
         <div class="text-center mt-5">
-          <div class="spinner-border text-warning" role="status">
-          </div>
-          <p>
-            Esperando monedas...
-          </p>
+          <div class="spinner-border text-warning" role="status"></div>
+          <p>Esperando monedas...</p>
         </div>
       </div>
       <div class="mt-3">
@@ -57,7 +54,7 @@ export default {
     "player",
     "previousPlayer",
     "totalCoins",
-    "roundCoins",
+    "roundCoins"
   ],
   data() {
     return {
@@ -81,9 +78,9 @@ export default {
   },
   methods: {
     onCoinSelection(rowsIndex, colsIndex) {
-      if (!this.player.selectedCoins.length && !this.firstSelectionDone) {
+      if (this.player.selectedCoins.length <= 1 && !this.firstSelectionDone) {
         this.firstSelectionDone = true;
-        this.$emit("firstSelectionDone");
+        this.$emit("firstSelectionDone", this.player.id);
       }
 
       const alreadySelected = this.player.selectedCoins.some(
@@ -123,18 +120,22 @@ export default {
       );
     },
 
-    async moveCoins() {
-      await this.$store.dispatch("socket_move_coins");
-
+    playerMoveCoins() {
       let total = [...this.player.selectedCoins, ...this.player.movedCoins];
 
       this.$emit("playerMoveCoins", {
-        playerIndex: this.id,
-        movedCoins: total,
+        playerIndex: this.player.id,
+        movedCoins: total
       });
+
       if (total.length === this.totalCoins) {
         this.firstSelectionDone = false;
       }
+    },
+
+    async moveCoins() {
+      await this.$store.dispatch("socket_move_coins");
+      this.playerMoveCoins();
     },
 
     receivedFromPreviousPlayer(rowsIndex, colsIndex) {
@@ -144,6 +145,20 @@ export default {
       return this.previousPlayer.movedCoins.some(
         coin => coin.row === rowsIndex && coin.col === colsIndex
       );
+    }
+  },
+  watch: {
+    "$store.state.pennyModule.movingAutoPlayer": {
+      handler() {
+        let movingAutoPlayer = this.$store.state.pennyModule.movingAutoPlayer;
+
+        if (
+          movingAutoPlayer.status &&
+          movingAutoPlayer.player === this.player.id
+        ) {
+          this.playerMoveCoins();
+        }
+      }
     }
   }
 };
