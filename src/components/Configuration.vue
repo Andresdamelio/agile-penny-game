@@ -144,6 +144,9 @@ export default {
   watch: {
     numberOfPlayers: "validate",
     name: "validate"
+  },
+  beforeCreate() {
+    this.$store.commit("SOCKET_STOP_COUNTER");
   }
 };
 </script>
