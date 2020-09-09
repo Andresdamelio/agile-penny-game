@@ -10,6 +10,7 @@ const pennyModule = {
     isThereRoom: false,
     timerRunning: false,
     timerRestart: false,
+    gameWithTheComputer: false,
     movingAutoPlayer: {player: null, status: false},
   },
   mutations: {
@@ -56,6 +57,9 @@ const pennyModule = {
     SOCKET_GAME_FINISHED: ( state ) => {
       state.gameFinish = true;
     },
+    SOCKET_WITH_COMPUTER: (state, status) => {
+      state.gameWithTheComputer = status;
+    },
     SOCKET_MOVING_AUTO_PLAYER: (state, status) => {
       state.movingAutoPlayer = status;
     }
@@ -85,6 +89,9 @@ const pennyModule = {
     },
     getTimerRestart: ( state ) => {
       return state.timerRestart
+    },
+    gameWithComputer: (state) => {
+      return state.gameWithTheComputer;
     }
   },
   actions: {
@@ -120,8 +127,9 @@ const pennyModule = {
       });
     },
 
-    socket_create_auto_players: ({ rootState, getters }) => {
+    socket_create_auto_players: ({ rootState, getters, commit }) => {
       rootState.io.emit("createAutoPlayers", { roomId: getters["getRoomId"] });
+      commit("SOCKET_WITH_COMPUTER", true);
     },
 
     socket_start_counter: ({ rootState, getters }) => {

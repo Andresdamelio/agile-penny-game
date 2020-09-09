@@ -147,6 +147,7 @@ export default {
   },
   beforeCreate() {
     this.$store.commit("SOCKET_STOP_COUNTER");
+    this.$store.commit("SOCKET_WITH_COMPUTER", false);
   }
 };
 </script>

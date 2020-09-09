@@ -12,7 +12,7 @@
       </button>
       <button
         class="ml-2 btn btn-primary"
-        v-if="!running && configurationGame.actualRoundIndex == 0"
+        v-if="!computer && configurationGame.actualRoundIndex == 0"
         @click="createAutoPlayers"
       >Jugar con la computadora</button>
 
@@ -91,7 +91,8 @@ export default {
       isThereRoom: "isThereRoom",
       configurationGame: "getGame",
       running: "getTimerRunning",
-      restart: "getTimerRestart"
+      restart: "getTimerRestart",
+      computer: "gameWithComputer"
     }),
 
     isLastRound() {
