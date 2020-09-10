@@ -22,12 +22,12 @@
 
       <div class="col-12 col-sm-12 col-md-5 offset-md-1 mb-2">
         <div class="card rounded">
-          <div class="card-header text-center" v-if="!rounds_generated">Iniciar nueva partida</div>
+          <div class="card-header text-center" v-if="!roundsGenerated">Iniciar nueva partida</div>
           <div class="card-header text-center" v-else>
             <h5 class="mb-0">Iteraciones en Penny Game</h5>
             <small>El juego se lleva a cabo en cuatro iteraciones.</small>
           </div>
-          <div class="card-body" v-if="!rounds_generated">
+          <div class="card-body" v-if="!roundsGenerated">
             <div class="form-group">
               <label for="namePlayer">Nombre</label>
               <input
@@ -59,8 +59,16 @@
               <button
                 class="btn btn-primary rounded create-round"
                 @click="generateRounds"
-                :disabled="showRule.send"
-              >Generar Rondas</button>
+                :disabled="showRule.send || load"
+              >
+                <span
+                  class="spinner-border spinner-border-sm"
+                  role="status"
+                  aria-hidden="true"
+                  v-if="load"
+                ></span>
+                {{ !load ? "Generar Rondas" : "Generando"}}
+              </button>
             </div>
           </div>
           <div class="card-body text-center" v-else>
@@ -76,6 +84,8 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 const rounds = [
   { key: 20, coins: 20 },
   { key: 10, coins: 10 },
@@ -94,9 +104,14 @@ export default {
         name: false,
         send: true
       },
-      rounds: rounds,
-      rounds_generated: false
+      load: false,
+      rounds: rounds
     };
+  },
+  computed: {
+    ...mapGetters({
+      roundsGenerated: "roundsGenerated"
+    })
   },
   methods: {
     validate() {
@@ -127,7 +142,8 @@ export default {
     },
 
     generateRounds() {
-      this.rounds_generated = true;
+      this.load = true;
+
       this.$store.dispatch("socket_new_room", {
         name: this.name,
         players: this.numberOfPlayers
@@ -148,6 +164,7 @@ export default {
   beforeCreate() {
     this.$store.commit("SOCKET_STOP_COUNTER");
     this.$store.commit("SOCKET_WITH_COMPUTER", false);
+    this.$store.commit("ROUNDS_GENERATE", false);
   }
 };
 </script>

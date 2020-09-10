@@ -11,6 +11,7 @@ const pennyModule = {
     timerRunning: false,
     timerRestart: false,
     gameWithTheComputer: false,
+    roundsGenerated: false,
     movingAutoPlayer: {player: null, status: false},
   },
   mutations: {
@@ -30,6 +31,9 @@ const pennyModule = {
     SET_RESULTS: (state, resume) => {
       state.gameResults = resume;
     },
+    ROUNDS_GENERATE: (state, status) => {
+      state.roundsGenerated = status;
+    },
     SOCKET_INIT_ROUND: (state, room) => {
       state.room = room;
     },
@@ -44,7 +48,6 @@ const pennyModule = {
     SOCKET_UPDATE_PLAYER: (state, player) => {
       const playerIndex = state.room.players.findIndex( mPlayer => mPlayer.id === player.id );
       Object.assign(state.room.players[playerIndex], player);
-
     },
     SOCKET_START_COUNTER: (state) => {
       state.timerRestart = false;
@@ -67,6 +70,9 @@ const pennyModule = {
   getters: {
     getRoomId: (state) => {
       return state.room.id;
+    },
+    roundsGenerated: (state) => {
+      return state.roundsGenerated;
     },
     getGame: (state) => {
       return {
@@ -101,6 +107,7 @@ const pennyModule = {
         if (resp.ok) {
           commit("ADD_ROOM", room);
           commit("SET_MAGIG_LINK", room.id);
+          commit("ROUNDS_GENERATE", true);
           dispatch("socket_join_room", { name, roomId: room.id });
         } else {
           console.error("Algo salió mal, no se pudo crear la sala");

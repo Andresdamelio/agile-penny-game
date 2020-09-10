@@ -16,7 +16,7 @@ const routes = [
   },
   {
     path: "/rooms",
-    name: "room",
+    name: "rooms",
     component: () => import("@/pages/Rooms"),
   },
 ];
