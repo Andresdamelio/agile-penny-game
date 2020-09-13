@@ -39,21 +39,10 @@
               />
               <small class="form-text text-danger" v-if="showRule.name">El campo nombre es requerido</small>
             </div>
-            <div class="form-group">
-              <label for="numberPlayers">Número de jugadores</label>
-              <input
-                type="number"
-                class="form-control"
-                id="numberPlayers"
-                min="2"
-                max="5"
-                v-model.number="numberOfPlayers"
-                placeholder="Indique el nro de jugadores"
-              />
-              <small
-                class="form-text text-danger"
-                v-if="showRule.number"
-              >El número de jugadores debe ser mayor a 1 y menor o igual que 5</small>
+            <div>
+              <p>
+                Esta partida consta de 5 (cinco) participantes, si creas una partida, serás el primer jugador.
+              </p>
             </div>
             <div class="text-right">
               <button
@@ -97,7 +86,7 @@ export default {
   name: "Configuration",
   data: () => {
     return {
-      numberOfPlayers: 2,
+      numberOfPlayers: 5,
       name: "",
       showRule: {
         number: false,

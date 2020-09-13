@@ -10,6 +10,7 @@ const pennyModule = {
     isThereRoom: false,
     timerRunning: false,
     timerRestart: false,
+    showModalRound: false,
     gameWithTheComputer: false,
     roundsGenerated: false,
     movingAutoPlayer: {player: null, status: false},
@@ -34,6 +35,9 @@ const pennyModule = {
     ROUNDS_GENERATE: (state, status) => {
       state.roundsGenerated = status;
     },
+    CLOSE_MODAL_ROUNDS: (state) => {
+      state.showModalRound = false;
+    },
     SOCKET_INIT_ROUND: (state, room) => {
       state.room = room;
     },
@@ -56,6 +60,7 @@ const pennyModule = {
     SOCKET_STOP_COUNTER: (state) => {
       state.timerRunning = false;
       state.timerRestart = true;
+      state.showModalRound = true;
     },
     SOCKET_GAME_FINISHED: ( state ) => {
       state.gameFinish = true;
@@ -81,7 +86,8 @@ const pennyModule = {
         players: state.room?.players ? state.room.players : [],
         coins: 20,
         actualRoundIndex: state.room?.actualRound ? state.room.actualRound : 0,
-        isFinished: state.gameFinish
+        isFinished: state.gameFinish,
+        showModalRound: state.showModalRound,
       };
     },
     isThereRoom: (state) => {

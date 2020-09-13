@@ -19,7 +19,7 @@
         class="ml-2 btn btn-primary"
         v-if="!running && currentPlayer == configurationGame.players[0].id && !computer && configurationGame.actualRoundIndex == 0"
         @click="createAutoPlayers"
-      >Jugar con la computadora</button>
+      >Invitar {{ configurationGame.size - configurationGame.players.length }} bots</button>
 
       <button
         class="ml-2 btn btn-primary magic-link"
@@ -81,13 +81,16 @@
         </template>
         <template v-else>
           <transition name="modal">
-            <modal-message
-              title="Bienvenido"
-              :showModal.sync="showModal"
-            >
+            <modal-message title="Bienvenido" :showModal.sync="showModal">
               <template slot="content">
-                <p>Para comenzar el juego deben haber {{ configurationGame.size }} participantes en la sala, puedes invitar a {{ configurationGame.size - 1 }} amigos para que se unan a esta partida, copiando el enlace en el botón
-                  <span class="magic-link btn-sm">Copiar link</span> o en su lugar, juega con la computadora.
+                <p>
+                  Para comenzar el juego deben haber {{ configurationGame.size }} participantes en la sala, puedes invitar a {{ configurationGame.size - 1 }} amigos para que se unan a esta partida, copiando el enlace en el botón
+                  <span
+                    class="magic-link btn-sm"
+                  >Copiar link</span> o en su lugar, puedes jugar con bots.
+                </p>
+                <p>
+                  Si tienes menos de {{ configurationGame.size - 1 }} amigos disponibles para jugar en este momento, también puedes invitarlos a la sala, e invitar los bots que sean necesarios para completar los cinco participantes.
                 </p>
               </template>
               <template slot="actions">
@@ -96,6 +99,23 @@
             </modal-message>
           </transition>
         </template>
+      </div>
+      <div v-if="configurationGame.showModalRound && configurationGame.actualRoundIndex > 0 && configurationGame.actualRoundIndex < 4 && currentPlayer == configurationGame.players[0].id">
+        <transition name="modal">
+          <modal-message title="Ronda terminada">
+            <template slot="content">
+              <p>
+                Ha finalizado la ronda {{ configurationGame.actualRoundIndex }}, para iniciar con la ronda {{ configurationGame.actualRoundIndex + 1 }} presiona el botón
+                <span
+                  class="btn-primary btn-sm"
+                >Comenzar</span>
+              </p>
+            </template>
+            <template slot="actions">
+              <button @click="$store.commit('CLOSE_MODAL_ROUNDS')" class="btn btn-primary">Ok</button>
+            </template>
+          </modal-message>
+        </transition>
       </div>
     </template>
   </div>
