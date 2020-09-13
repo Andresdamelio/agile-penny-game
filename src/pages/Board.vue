@@ -2,7 +2,11 @@
   <div class="container my-5" v-if="isThereRoom && configurationGame">
     <game-result v-if="configurationGame.actualRoundIndex > 3" />
     <template v-else>
-      <button class="btn btn-primary timer" @click="stopPlayTimer">
+      <button
+        class="btn btn-primary timer"
+        @click="stopPlayTimer"
+        :disabled="currentPlayer != configurationGame.players[0].id"
+      >
         <timer
           :running.sync="running"
           :restart.sync="restart"
@@ -12,11 +16,11 @@
       </button>
       <button
         class="ml-2 btn btn-primary"
-        v-if="!computer && configurationGame.actualRoundIndex == 0"
+        v-if="!running && currentPlayer == configurationGame.players[0].id && !computer && configurationGame.actualRoundIndex == 0"
         @click="createAutoPlayers"
       >Jugar con la computadora</button>
 
-      <button class="ml-2 btn btn-primary magic-link" @click="copy">Copiar link</button>
+      <button class="ml-2 btn btn-primary magic-link" @click="copy" v-if="!running && configurationGame.actualRoundIndex == 0">Copiar link</button>
 
       <input type="hidden" :value="$store.state.pennyModule.magigLink" ref="magicLink" />
 
