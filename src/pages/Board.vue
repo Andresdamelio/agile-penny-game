@@ -21,7 +21,11 @@
         @click="createAutoPlayers"
       >Jugar con la computadora</button>
 
-      <button class="ml-2 btn btn-primary magic-link" @click="copy" v-if="!running && configurationGame.actualRoundIndex == 0">Copiar link</button>
+      <button
+        class="ml-2 btn btn-primary magic-link"
+        @click="copy"
+        v-if="!running && configurationGame.actualRoundIndex == 0"
+      >Copiar link</button>
 
       <input type="hidden" :value="$store.state.pennyModule.magigLink" ref="magicLink" />
 
@@ -52,21 +56,46 @@
           ></player-zone>
         </div>
       </div>
-      <div v-if="showModal && !currentPlayer">
-        <transition name="modal">
-          <template>
+      <div v-if="showModal">
+        <template v-if="!currentPlayer">
+          <transition name="modal">
             <form-player
               v-if="configurationGame.players.length < configurationGame.size"
               :showModal.sync="showModal"
             ></form-player>
+          </transition>
+          <transition name="modal">
             <modal-message
+              v-if="configurationGame.players.length >= configurationGame.size"
               title="Sala llena"
-              message="Esta sala se encuentra llena, para jugar ingrese a otra sala, o cree una nueva"
-              buttonText="Volver al incio"
               :showModal.sync="showModal"
-            />
-          </template>
-        </transition>
+            >
+              <template slot="content">
+                <p>Esta sala se encuentra llena, para jugar ingrese a otra sala, o cree una nueva</p>
+              </template>
+              <template slot="actions">
+                <router-link class="btn btn-primary" to="/">Volver al incio</router-link>
+              </template>
+            </modal-message>
+          </transition>
+        </template>
+        <template v-else>
+          <transition name="modal">
+            <modal-message
+              title="Bienvenido"
+              :showModal.sync="showModal"
+            >
+              <template slot="content">
+                <p>Para comenzar el juego deben haber {{ configurationGame.size }} participantes en la sala, puedes invitar a {{ configurationGame.size - 1 }} amigos para que se unan a esta partida, copiando el enlace en el botón
+                  <span class="magic-link btn-sm">Copiar link</span> o en su lugar, juega con la computadora.
+                </p>
+              </template>
+              <template slot="actions">
+                <button @click="showModal = false" class="btn btn-primary">Ok</button>
+              </template>
+            </modal-message>
+          </transition>
+        </template>
       </div>
     </template>
   </div>
@@ -202,7 +231,8 @@ export default {
 
 .magic-link,
 .magic-link:focus,
-.magic-link:active {
+.magic-link:active,
+.magic-link:hover {
   background-color: #ffecb3 !important;
   color: #303133 !important;
 }

@@ -10,10 +10,10 @@
             </button>
           </div>
           <div class="modal-body">
-            <p>{{message}}</p>
+            <slot name="content"></slot>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-primary" @click="close">{{buttonText}}</button>
+            <slot name="actions"></slot>
           </div>
         </div>
       </div>
@@ -26,14 +26,6 @@ export default {
     title:{
       type: String,
       default: 'Título',
-    },
-    message:{
-      type: String,
-      default: 'Mensaje',
-    },
-    buttonText:{
-      type: String,
-      default: 'Botón',
     },
     showModal: {
       type: Boolean,
@@ -48,7 +40,6 @@ export default {
   methods: {
     close() {
       this.$emit("update:showModal", false);
-      this.$router.push({name: "home"});
     }
   }
 };
