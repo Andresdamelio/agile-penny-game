@@ -133,8 +133,8 @@ export default {
       }
     },
 
-    async moveCoins() {
-      await this.$store.dispatch("socket_move_coins");
+    moveCoins() {
+      this.$store.dispatch("socket_move_coins");
       this.playerMoveCoins();
     },
 
@@ -156,6 +156,7 @@ export default {
           movingAutoPlayer.status &&
           movingAutoPlayer.player === this.player.id
         ) {
+          console.log("Se ejecuto el mover monedas")
           this.playerMoveCoins();
         }
       }

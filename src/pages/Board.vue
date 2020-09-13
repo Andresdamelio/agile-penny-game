@@ -161,6 +161,7 @@ export default {
       this.$store.dispatch("socket_start_counter");
 
       if (this.currentDate == 0) {
+        this.actualTime = 0;
         this.$store.dispatch("socket_init_round");
       }
     },

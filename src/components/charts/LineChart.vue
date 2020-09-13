@@ -1,5 +1,5 @@
 <script>
-import { Line } from 'vue-chartjs'
+import { Line } from "vue-chartjs";
 
 export default {
   extends: Line,
@@ -8,6 +8,24 @@ export default {
       options: {
         responsive: true,
         maintainAspectRatio: false,
+        scales: {
+          xAxes: [
+            {
+              scaleLabel: {
+                display: true,
+                labelString: "Tamaños de lote"
+              }
+            }
+          ],
+          yAxes: [
+            {
+              scaleLabel: {
+                display: true,
+                labelString: "Tiempo (seg)"
+              }
+            }
+          ]
+        }
       }
     };
   },
@@ -19,13 +37,13 @@ export default {
       type: Array
     }
   },
-  mounted () {
+  mounted() {
     let config = {
       labels: this.labels,
       datasets: this.datasets
     };
     this.renderChart(config, this.options);
-    this.$refs.canvas.height = 'auto';
+    this.$refs.canvas.height = "auto";
   }
-}
+};
 </script>

@@ -11,11 +11,19 @@ export default {
         scales: {
           xAxes: [
             {
-              stacked: true,
+              scaleLabel: {
+                display: true,
+                labelString: "tiempo (seg)"
+              },
+              stacked: true
             }
           ],
           yAxes: [
             {
+              scaleLabel: {
+                display: true,
+                labelString: "Jugadores"
+              },
               barThickness: 15, // number (pixels) or 'flex',/*  */
               stacked: true,
               gridLines: {
@@ -42,7 +50,7 @@ export default {
       datasets: this.datasets
     };
     this.renderChart(config, this.options);
-    this.$refs.canvas.height = 'auto';
+    this.$refs.canvas.height = "auto";
   }
 };
 </script>
