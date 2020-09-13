@@ -3,6 +3,7 @@
     <game-result v-if="configurationGame.actualRoundIndex > 3" />
     <template v-else>
       <button
+        v-if="configurationGame.players.length === configurationGame.size"
         class="btn btn-primary timer"
         @click="stopPlayTimer"
         :disabled="currentPlayer != configurationGame.players[0].id"
