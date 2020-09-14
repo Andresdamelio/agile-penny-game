@@ -7,16 +7,10 @@
 
       <div class="col-12 col-sm-12 col-md-6">
         <p class="instructions">
-          En este juego tu y tus compañeros representan una
-          fábrica que procesa monedas de una manera muy sencilla: Dando vuelta monedas.
-          Para que tu y tus compañeros puedan ver el efecto de cambiar el tamaño del “lote” de
-          monedas y su impacto en el flujo de trabajo, haremos un conjunto de experimentos en
-          esta fábrica de monedas.
-          Un lote de monedas representa un conjunto de monedas, por ejemplo, un lote de 5
-          monedas representa 5 monedas, un lote de 10 monedas representa un lote de a 10 y así
-          sucesivamente.
-          En la fábrica en cada experimento cambiaremos cada lote a un menor tamaño y veremos
-          como impacta en la eficiencia de la operación.
+          En este juego tu y tus compañeros representan una fábrica que procesa monedas de una manera muy sencilla: Dando vuelta las monedas.
+          Haremos un conjunto de experimentos en esta fábrica de monedas, para que tu y tus compañeros puedan ver el efecto de cambiar el tamaño del “lote” de monedas y su impacto en el flujo de trabajo.
+          Un lote de monedas representa un conjunto de monedas, por ejemplo, un lote de 5 monedas representa 5 monedas, un lote de 10 monedas representa un lote de a 10 y así sucesivamente.
+          En cada experimento reduciremos el tamaño del lote, y veremos como impacta en la eficiencia de la operación.
         </p>
       </div>
 
@@ -40,9 +34,7 @@
               <small class="form-text text-danger" v-if="showRule.name">El campo nombre es requerido</small>
             </div>
             <div>
-              <p>
-                Esta partida consta de 5 (cinco) participantes, si creas una partida, serás el primer jugador.
-              </p>
+              <p>Esta partida consta de 5 (cinco) participantes, si creas una partida, serás el primer jugador.</p>
             </div>
             <div class="text-right">
               <button
@@ -160,7 +152,7 @@ export default {
 
 <style scoped lang="scss">
 .instructions-title {
-  color: #e64a19;
+  color: #00A99D;
   font-size: 28px;
 }
 
@@ -168,8 +160,8 @@ export default {
 .btn-primary:hover,
 .btn-primary:active,
 .btn-primary:focus {
-  background-color: #e64a19 !important;
-  border-color: #e64a19 !important;
+  background-color: #00A99D !important;
+  border-color: #00A99D !important;
   box-shadow: none !important;
 }
 
