@@ -26,8 +26,8 @@ export default {
   right: 10px;
 
   .toast-header {
-    background-color: #ffecb3;
-    color: #e64a19;
+    background-color: #baece9;
+    color: #00a99d;
   }
 }
 </style>

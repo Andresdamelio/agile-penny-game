@@ -98,9 +98,9 @@
         </template>
       </div>
       <div
-        v-if="configurationGame.showModalRound && configurationGame.actualRoundIndex > 0 && configurationGame.actualRoundIndex < 4 && currentPlayer == configurationGame.players[0].id"
+        v-if="configurationGame.showModalRound && configurationGame.actualRoundIndex > 0 && configurationGame.actualRoundIndex < 4"
       >
-        <transition name="modal">
+        <transition name="modal" v-if="currentPlayer == configurationGame.players[0].id">
           <modal-message title="Ronda terminada">
             <template slot="content">
               <p>
@@ -108,6 +108,18 @@
                 <span
                   class="btn-primary btn-sm"
                 >Comenzar</span>
+              </p>
+            </template>
+            <template slot="actions">
+              <button @click="$store.commit('CLOSE_MODAL_ROUNDS')" class="btn btn-primary">Ok</button>
+            </template>
+          </modal-message>
+        </transition>
+        <transition name="modal" v-else="">
+          <modal-message title="Ronda terminada">
+            <template slot="content">
+              <p>
+                Ha finalizado la ronda {{ configurationGame.actualRoundIndex }}, está por comenzar la ronda {{ configurationGame.actualRoundIndex + 1 }}, en esta se deben mover lotes de {{configurationGame.rounds[configurationGame.actualRoundIndex].sizeLot}} monedas.
               </p>
             </template>
             <template slot="actions">
