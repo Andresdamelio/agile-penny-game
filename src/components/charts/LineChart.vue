@@ -43,7 +43,7 @@ export default {
       datasets: this.datasets
     };
     this.renderChart(config, this.options);
-    this.$refs.canvas.height = "auto";
+    document.getElementById("horizontalbar-chart").height = "auto";
   }
 };
 </script>

@@ -85,8 +85,8 @@ export default {
 .btn-primary:hover,
 .btn-primary:active,
 .btn-primary:focus {
-  background-color: #e64a19 !important;
-  border-color: #e64a19 !important;
+  background-color: #00a99d !important;
+  border-color: #00a99d !important;
   box-shadow: none !important;
 }
 </style>
