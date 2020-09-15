@@ -23,7 +23,7 @@
       </div>
       <div v-else>
         <div class="text-center mt-5">
-          <div class="spinner-border text-warning" role="status"></div>
+          <div class="spinner-border text-green" role="status"></div>
           <p>Esperando monedas...</p>
         </div>
       </div>
@@ -168,5 +168,9 @@ export default {
 .player-zone {
   width: 100%;
   height: 100%;
+}
+
+.text-green {
+  color: #00a99d;
 }
 </style>

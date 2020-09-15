@@ -23,9 +23,9 @@
 <script>
 export default {
   props: {
-    title:{
+    title: {
       type: String,
-      default: 'Título',
+      default: "Título"
     },
     showModal: {
       type: Boolean,
@@ -66,17 +66,17 @@ export default {
 .btn:hover,
 .btn:active,
 .btn:focus {
-  border-color: #e64a19 !important;
+  border-color: #00a99d !important;
   box-shadow: none !important;
 }
 
 .btn-primary {
-  background-color: #e64a19 !important;
+  background-color: #00a99d !important;
 }
 
 .btn-secondary,
 .close {
   background-color: transparent !important;
-  color: #e64a19 !important;
+  color: #00a99d !important;
 }
 </style>

@@ -14,7 +14,7 @@
             <div class="float-left">
               <a :href="`/room/${room.id}`" target="_blank">{{ room.id }}</a>
 
-              <small class="ml-2">Creada por {{ room.players[0].name }}</small>
+              <small class="ml-2">Creada por {{ room.players[0].name }} hace {{ room.createdAt | timeSince }}</small>
             </div>
             <div class="float-right">
               <span class="badge badge-primary badge-pill ml-2">{{room.size}} jugadores</span>
@@ -69,6 +69,7 @@ export default {
       .then(resp => {
         if (resp.ok) {
           this.rooms = resp.rooms;
+          console.log(resp.rooms)
         } else {
           console.log("Algo salió mal, recargue la página");
         }

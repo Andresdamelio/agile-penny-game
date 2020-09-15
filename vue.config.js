@@ -6,7 +6,7 @@ module.exports = {
       entry: "./src/main.js",
       template: "public/index.html",
       filename: "index.html",
-      title: "Penny Game",
+      title: "Juego de las monedas",
     },
   },
 };

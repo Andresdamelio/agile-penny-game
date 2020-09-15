@@ -32,8 +32,7 @@
       <h1 class="text-center">Ronda {{ configurationGame.actualRoundIndex + 1}}</h1>
 
       <p>
-        Deben mover lotes de {{ configurationGame.rounds[configurationGame.actualRoundIndex].sizeLot}}
-        {{ configurationGame.rounds[configurationGame.actualRoundIndex].sizeLot > 1 ? "monedas" : "moneda"}} hasta haber movido todas las monedas de su lugar
+        Deben mover lotes de {{ configurationGame.rounds[configurationGame.actualRoundIndex].sizeLot}} {{ configurationGame.rounds[configurationGame.actualRoundIndex].sizeLot > 1 ? "monedas" : "moneda"}} hasta haber movido todas las monedas de su lugar, cuando termines tu trabajo presiona el botón <span class="btn-primary btn-sm">Mover Lote</span> Luego observa al resto trabajar.
       </p>
 
       <div class="row no-gutters">
@@ -84,13 +83,11 @@
             <modal-message title="Bienvenido" :showModal.sync="showModal">
               <template slot="content">
                 <p>
-                  Para comenzar el juego deben haber {{ configurationGame.size }} participantes en la sala, puedes invitar a {{ configurationGame.size - 1 }} amigos para que se unan a esta partida, copiando el enlace en el botón
-                  <span
-                    class="magic-link btn-sm"
-                  >Copiar link</span> o en su lugar, puedes jugar con bots.
+                  Para comenzar el juego deben haber {{ configurationGame.size }} participantes en la sala, como administrador de la fábrica puedes invitar a {{ configurationGame.size - 1 }} amigos para que se unan a esta partida, copiando el enlace en el botón
+                  <br/>  <span class="magic-link btn-sm">Copiar link</span> o en su lugar, puedes jugar con bots.
                 </p>
                 <p>
-                  Si tienes menos de {{ configurationGame.size - 1 }} amigos disponibles para jugar en este momento, también puedes invitarlos a la sala, e invitar los bots que sean necesarios para completar los cinco participantes.
+                  Si tienes menos de {{ configurationGame.size - 1 }} amigos disponibles para jugar en este momento, también puedes invitarlos a la sala, e invitar los bots (jugadores virtuales automáticos) que sean necesarios para completar los cinco participantes.
                 </p>
               </template>
               <template slot="actions">
@@ -100,7 +97,9 @@
           </transition>
         </template>
       </div>
-      <div v-if="configurationGame.showModalRound && configurationGame.actualRoundIndex > 0 && configurationGame.actualRoundIndex < 4 && currentPlayer == configurationGame.players[0].id">
+      <div
+        v-if="configurationGame.showModalRound && configurationGame.actualRoundIndex > 0 && configurationGame.actualRoundIndex < 4 && currentPlayer == configurationGame.players[0].id"
+      >
         <transition name="modal">
           <modal-message title="Ronda terminada">
             <template slot="content">
@@ -242,18 +241,18 @@ export default {
 .btn-primary:hover,
 .btn-primary:active,
 .btn-primary:focus {
-  border-color: #e64a19 !important;
+  border-color: #00a99d !important;
   box-shadow: none !important;
 }
 .timer {
-  background-color: #e64a19 !important;
+  background-color: #00a99d !important;
 }
 
 .magic-link,
 .magic-link:focus,
 .magic-link:active,
 .magic-link:hover {
-  background-color: #ffecb3 !important;
+  background-color: #baece9 !important;
   color: #303133 !important;
 }
 </style>

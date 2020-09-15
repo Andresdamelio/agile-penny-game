@@ -9,6 +9,9 @@ import store from "./store.js";
 // Vue Router
 import router from "./router";
 
+// filters
+import "./filters/filters";
+
 new Vue({
   store,
   router,
