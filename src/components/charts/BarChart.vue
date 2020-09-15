@@ -15,7 +15,11 @@ export default {
                 display: true,
                 labelString: "tiempo (seg)"
               },
-              stacked: true
+              stacked: true,
+              ticks: {
+                    suggestedMin: 0,
+                    suggestedMax: this.maxValTicks
+                }
             }
           ],
           yAxes: [
@@ -41,6 +45,10 @@ export default {
     },
     datasets: {
       type: Array
+    },
+    maxValTicks:{
+      type: Number,
+      default: 100,
     }
   },
 

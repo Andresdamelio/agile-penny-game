@@ -20,7 +20,7 @@
           </thead>
           <tbody>
             <tr v-for="(res, index) in round.results" :key="index">
-              <th scope="row">{{index+1}}</th>
+              <th scope="row">{{5-index}}</th>
               <td>{{res.player.name}}</td>
               <td>{{res.initWait}}</td>
               <td>{{res.receptionTime}}</td>
@@ -32,6 +32,7 @@
         <bar-chart
           class="col-12 col-sm-6 rounds-results-tables-container h-auto"
           :labels="round.chartLabels"
+          :maxValTicks="maxValTicks"
           :datasets="round.chartData"
         />
       </div>
@@ -203,6 +204,13 @@ export default {
   computed: {
     resume() {
       return this. $store.state.pennyModule.gameResults;
+    },
+    maxValTicks(){
+      let max = this.resume.tableResults.map(res =>{
+        return res.results.map(r => r.receptionTime).sort((a,b) => a>b)[0]
+      }).sort((a,b) => a>b)[0]
+      console.log(max)
+      return max
     }
   },
   beforeCreate() {
@@ -214,8 +222,8 @@ export default {
 <style scoped>
 .table-row-color td,
 .table-row-color th {
-  background-color: #ffecb3 !important;
-  border-top: 1px solid #e64a19;
+  background-color: #baece9 !important;
+  border-top: 1px solid #00A99D;
   font-weight: 500;
 }
 </style>
