@@ -2,7 +2,7 @@
     <footer class="container-fluid custom-footer fixed-bottom">
         <div class="row">
             <div class="col">
-                4A transformaciones de negocios en la era digital @chile 2020 Todos los derechos reservados
+                4A transformaciones de negocios en la era digital © Chile 2020. Todos los derechos reservados
             </div>
         </div>
     </footer>
