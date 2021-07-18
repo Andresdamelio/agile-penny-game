@@ -3,9 +3,14 @@
     <div class="modal-wrapper">
       <div class="modal-dialog">
         <div class="modal-content">
-          <div class="modal-header">
-            <h2 class="modal-title">{{title}}</h2>
-            <button type="button" class="close" @click="close" aria-label="close">
+          <div class="modal-header d-flex align-items-center">
+            <h2 class="modal-title">{{ title }}</h2>
+            <button
+              type="button"
+              class="close"
+              @click="close"
+              aria-label="close"
+            >
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
@@ -25,7 +30,7 @@ export default {
   props: {
     title: {
       type: String,
-      default: "Título"
+      default: 'Título'
     },
     showModal: {
       type: Boolean,
@@ -39,7 +44,7 @@ export default {
   },
   methods: {
     close() {
-      this.$emit("update:showModal", false);
+      this.$emit('update:showModal', false);
     }
   }
 };
@@ -55,28 +60,48 @@ export default {
   background-color: rgba(0, 0, 0, 0.5);
   display: table;
   transition: opacity 0.3s ease;
+
+  .modal-wrapper {
+    display: table-cell;
+    vertical-align: middle;
+
+    .modal-title {
+      font-weight: 600;
+      line-height: 1;
+    }
+  }
+
+  .btn,
+  .btn:hover,
+  .btn:active,
+  .btn:focus {
+    border-color:  #17598a !important;
+    box-shadow: none !important;
+    opacity: 1;
+    font-family: 'Manrope', sans-serif;
+
+    &.btn-primary {
+      background-color:  #17598a !important;
+      font-weight: 700;
+    }
+
+    &.btn-secondary,
+    .close {
+      background-color: transparent !important;
+      color: #17598a !important;
+      opacity: 1;
+      font-size: 20px;
+    }
+  }
+  button.close {
+    font-size: 30px;
+    color: #17598a !important;
+    opacity: 1;
+  }
 }
 
-.modal-wrapper {
-  display: table-cell;
-  vertical-align: middle;
-}
-
-.btn,
-.btn:hover,
-.btn:active,
-.btn:focus {
-  border-color: #00a99d !important;
-  box-shadow: none !important;
-}
-
-.btn-primary {
-  background-color: #00a99d !important;
-}
-
-.btn-secondary,
-.close {
-  background-color: transparent !important;
-  color: #00a99d !important;
+.modal-content {
+  font-family: 'Manrope', sans-serif;
+  color: #000;
 }
 </style>

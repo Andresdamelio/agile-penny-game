@@ -26,8 +26,16 @@ export default {
   right: 10px;
 
   .toast-header {
-    background-color: #baece9;
-    color: #00a99d;
+    background-color: #17598a;
+    color: #fff;
+    font-family: 'Manrope', sans-serif;
+    font-weight: 600;
+  }
+
+  .toast-body {
+    color: #000;
+    font-family: 'Manrope', sans-serif;
+    font-weight: 400;
   }
 }
 </style>

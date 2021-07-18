@@ -117,7 +117,7 @@ export default {
               },
               {
                 label: "Plazo de entrega",
-                backgroundColor: "#e64a19",
+                backgroundColor: "#17598a",
                 data: [25, 29]
               }
             ]
@@ -222,8 +222,10 @@ export default {
 <style scoped>
 .table-row-color td,
 .table-row-color th {
-  background-color: #baece9 !important;
+  background-color: #17598a !important;
+  font-family: 'Manrope', sans-serif;
+  font-weight: 600;
   border-top: 1px solid #00A99D;
-  font-weight: 500;
+  color: #fff;
 }
 </style>

@@ -2,13 +2,13 @@
   <header
     class="container-fluid custom-header d-flex justify-content-between align-content-center align-items-center flex-column flex-sm-row mb-3"
   >
-    <router-link to="/">
+    <a href="https://www.4agile.cl/" target="_blank" rel="noreferrer noopener">
       <div
         class="d-flex align-content-center justify-content-center align-items-center justify-content-sm-start"
       >
         <img class="icon-header" src="@/assets/img/logo.png" alt="logo 4agile" />
       </div>
-    </router-link>
+    </a>
     <ul class="nav justify-content-center justify-content-sm-start">
       <li class="nav-item">
         <router-link to="/">Inicio</router-link>
@@ -42,17 +42,18 @@ export default {
     padding: 0 10px;
   }
   a {
-    color: #333;
-    font-weight: 400;
-    &:hover {
+    color: #000000;
+    font-weight: 700;
+    font-family: 'Manrope', sans-serif;
+    &:hover, &.router-link-exact-active.router-link-active {
       text-decoration: none;
-      color: #00a99d;
+      color: #17598a;
     }
   }
 }
 
 .icon-header {
-  max-width: 260px;
+  max-width: 270px;
   height: auto;
 }
 </style>

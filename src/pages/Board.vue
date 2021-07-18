@@ -17,22 +17,51 @@
       </button>
       <button
         class="ml-2 btn btn-primary"
-        v-if="!running && currentPlayer == configurationGame.players[0].id && !computer && configurationGame.actualRoundIndex == 0"
+        v-if="
+          !running &&
+            currentPlayer == configurationGame.players[0].id &&
+            !computer &&
+            configurationGame.actualRoundIndex == 0
+        "
         @click="createAutoPlayers"
-      >Invitar {{ configurationGame.size - configurationGame.players.length }} bots</button>
+      >
+        Invitar
+        {{ configurationGame.size - configurationGame.players.length }} bots
+      </button>
 
       <button
         class="ml-2 btn btn-primary magic-link"
         @click="copy"
         v-if="!running && configurationGame.actualRoundIndex == 0"
-      >Copiar link</button>
+      >
+        Copiar link
+      </button>
 
-      <input type="hidden" :value="$store.state.pennyModule.magigLink" ref="magicLink" />
+      <input
+        type="hidden"
+        :value="$store.state.pennyModule.magigLink"
+        ref="magicLink"
+      />
 
-      <h1 class="text-center">Ronda {{ configurationGame.actualRoundIndex + 1}}</h1>
+      <h1 class="text-center text-round-title">
+        Ronda {{ configurationGame.actualRoundIndex + 1 }}
+      </h1>
 
-      <p>
-        Deben mover lotes de {{ configurationGame.rounds[configurationGame.actualRoundIndex].sizeLot}} {{ configurationGame.rounds[configurationGame.actualRoundIndex].sizeLot > 1 ? "monedas" : "moneda"}} hasta haber movido todas las monedas de su lugar, cuando termines tu trabajo presiona el botón <span class="btn-primary btn-sm">Mover Lote</span> Luego observa al resto trabajar.
+      <p class="text-round">
+        Deben mover lotes de
+        {{
+          configurationGame.rounds[configurationGame.actualRoundIndex].sizeLot
+        }}
+        {{
+          configurationGame.rounds[configurationGame.actualRoundIndex].sizeLot >
+          1
+            ? 'monedas'
+            : 'moneda'
+        }}
+        hasta haber movido todas las monedas de su lugar, cuando termines tu
+        trabajo presiona el botón
+        <span class="btn-primary btn-sm">Mover Lote</span> Luego observa al
+        resto trabajar.
       </p>
 
       <div class="row no-gutters">
@@ -46,9 +75,14 @@
             :start="index === 0"
             :end="index === configurationGame.players.length - 1"
             :player.sync="player"
-            :previousPlayer="index !== 0 ? configurationGame.players[index - 1] : null"
+            :previousPlayer="
+              index !== 0 ? configurationGame.players[index - 1] : null
+            "
             :totalCoins="configurationGame.coins"
-            :roundCoins="configurationGame.rounds[configurationGame.actualRoundIndex].sizeLot"
+            :roundCoins="
+              configurationGame.rounds[configurationGame.actualRoundIndex]
+                .sizeLot
+            "
             :distribution="distribution"
             @playerMoveCoins="onPlayerMoveCoins"
             @firstSelectionDone="onFirstSelectionDone"
@@ -70,10 +104,15 @@
               :showModal.sync="showModal"
             >
               <template slot="content">
-                <p>Esta sala se encuentra llena, para jugar ingrese a otra sala, o cree una nueva</p>
+                <p>
+                  Esta sala se encuentra llena, para jugar ingrese a otra sala,
+                  o cree una nueva
+                </p>
               </template>
               <template slot="actions">
-                <router-link class="btn btn-primary" to="/">Volver al incio</router-link>
+                <router-link class="btn btn-primary" to="/"
+                  >Volver al incio</router-link
+                >
               </template>
             </modal-message>
           </transition>
@@ -83,35 +122,58 @@
             <modal-message title="Bienvenido" :showModal.sync="showModal">
               <template slot="content">
                 <p>
-                  Para comenzar el juego deben haber {{ configurationGame.size }} participantes en la sala, como administrador de la fábrica puedes invitar a {{ configurationGame.size - 1 }} amigos para que se unan a esta partida, copiando el enlace en el botón
-                  <br/>  <span class="magic-link btn-sm">Copiar link</span> o en su lugar, puedes jugar con bots.
+                  Para comenzar el juego deben haber
+                  {{ configurationGame.size }} participantes en la sala, como
+                  administrador de la fábrica puedes invitar a
+                  {{ configurationGame.size - 1 }} amigos para que se unan a
+                  esta partida, copiando el enlace en el botón <br />
+                  <span class="magic-link btn-sm">Copiar link</span> o en su
+                  lugar, puedes jugar con bots.
                 </p>
                 <p>
-                  Si tienes menos de {{ configurationGame.size - 1 }} amigos disponibles para jugar en este momento, también puedes invitarlos a la sala, e invitar los bots (jugadores virtuales automáticos) que sean necesarios para completar los cinco participantes.
+                  Si tienes menos de {{ configurationGame.size - 1 }} amigos
+                  disponibles para jugar en este momento, también puedes
+                  invitarlos a la sala, e invitar los bots (jugadores virtuales
+                  automáticos) que sean necesarios para completar los cinco
+                  participantes.
                 </p>
               </template>
               <template slot="actions">
-                <button @click="showModal = false" class="btn btn-primary">Ok</button>
+                <button @click="showModal = false" class="btn btn-primary">
+                  Ok
+                </button>
               </template>
             </modal-message>
           </transition>
         </template>
       </div>
       <div
-        v-if="configurationGame.showModalRound && configurationGame.actualRoundIndex > 0 && configurationGame.actualRoundIndex < 4"
+        v-if="
+          configurationGame.showModalRound &&
+            configurationGame.actualRoundIndex > 0 &&
+            configurationGame.actualRoundIndex < 4
+        "
       >
-        <transition name="modal" v-if="currentPlayer == configurationGame.players[0].id">
+        <transition
+          name="modal"
+          v-if="currentPlayer == configurationGame.players[0].id"
+        >
           <modal-message title="Ronda terminada">
             <template slot="content">
               <p>
-                Ha finalizado la ronda {{ configurationGame.actualRoundIndex }}, para iniciar con la ronda {{ configurationGame.actualRoundIndex + 1 }} presiona el botón
-                <span
-                  class="btn-primary btn-sm"
-                >Comenzar</span>
+                Ha finalizado la ronda {{ configurationGame.actualRoundIndex }},
+                para iniciar con la ronda
+                {{ configurationGame.actualRoundIndex + 1 }} presiona el botón
+                <span class="btn-primary btn-sm">Comenzar</span>
               </p>
             </template>
             <template slot="actions">
-              <button @click="$store.commit('CLOSE_MODAL_ROUNDS')" class="btn btn-primary">Ok</button>
+              <button
+                @click="$store.commit('CLOSE_MODAL_ROUNDS')"
+                class="btn btn-primary"
+              >
+                Ok
+              </button>
             </template>
           </modal-message>
         </transition>
@@ -119,11 +181,24 @@
           <modal-message title="Ronda terminada">
             <template slot="content">
               <p>
-                Ha finalizado la ronda {{ configurationGame.actualRoundIndex }}, está por comenzar la ronda {{ configurationGame.actualRoundIndex + 1 }}, en esta se deben mover lotes de {{configurationGame.rounds[configurationGame.actualRoundIndex].sizeLot}} monedas.
+                Ha finalizado la ronda {{ configurationGame.actualRoundIndex }},
+                está por comenzar la ronda
+                {{ configurationGame.actualRoundIndex + 1 }}, en esta se deben
+                mover lotes de
+                {{
+                  configurationGame.rounds[configurationGame.actualRoundIndex]
+                    .sizeLot
+                }}
+                monedas.
               </p>
             </template>
             <template slot="actions">
-              <button @click="$store.commit('CLOSE_MODAL_ROUNDS')" class="btn btn-primary">Ok</button>
+              <button
+                @click="$store.commit('CLOSE_MODAL_ROUNDS')"
+                class="btn btn-primary"
+              >
+                Ok
+              </button>
             </template>
           </modal-message>
         </transition>
@@ -133,31 +208,31 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import PlayerZone from "../components/PlayerZone";
-import Timer from "@/components/Timer";
-import FormPlayer from "@/components/FormPlayer";
-import ModalMessage from "@/components/Modal";
-import GameResult from "./GameResult";
+import { mapGetters } from 'vuex';
+import PlayerZone from '../components/PlayerZone';
+import Timer from '@/components/Timer';
+import FormPlayer from '@/components/FormPlayer';
+import ModalMessage from '@/components/Modal';
+import GameResult from './GameResult';
 
 export default {
-  name: "Board",
+  name: 'Board',
   data() {
     return {
       currentDate: 0,
       distribution: { rows: 5, cols: 4 },
       actualTime: null,
       showModal: true,
-      currentPlayer: this.$store.getters["getCurrentPlayer"]
+      currentPlayer: this.$store.getters['getCurrentPlayer']
     };
   },
   computed: {
     ...mapGetters({
-      isThereRoom: "isThereRoom",
-      configurationGame: "getGame",
-      running: "getTimerRunning",
-      restart: "getTimerRestart",
-      computer: "gameWithComputer"
+      isThereRoom: 'isThereRoom',
+      configurationGame: 'getGame',
+      running: 'getTimerRunning',
+      restart: 'getTimerRestart',
+      computer: 'gameWithComputer'
     }),
 
     isLastRound() {
@@ -170,25 +245,25 @@ export default {
   methods: {
     copy() {
       let magicLink = this.$refs.magicLink;
-      magicLink.setAttribute("type", "text");
+      magicLink.setAttribute('type', 'text');
       magicLink.select();
-      document.execCommand("copy");
-      magicLink.setAttribute("type", "hidden");
+      document.execCommand('copy');
+      magicLink.setAttribute('type', 'hidden');
 
-      this.$store.commit("SOCKET_SHOW_NOTIFY", {
+      this.$store.commit('SOCKET_SHOW_NOTIFY', {
         notify: {
           show: true,
-          title: "Enlace copiado",
-          message: "El enlace se ha copiado con éxito"
+          title: 'Enlace copiado',
+          message: 'El enlace se ha copiado con éxito'
         }
       });
     },
 
     onPlayerMoveCoins({ movedCoins, playerIndex }) {
       if (movedCoins.length === this.configurationGame.coins) {
-        this.$store.dispatch("socket_save_result", {
+        this.$store.dispatch('socket_save_result', {
           time: this.actualTime,
-          type: "finish",
+          type: 'finish',
           id: playerIndex
         });
       }
@@ -198,15 +273,15 @@ export default {
         movedCoins.length === this.configurationGame.coins
       ) {
         if (this.isLastRound) {
-          this.$store.dispatch("socket_end_game");
+          this.$store.dispatch('socket_end_game');
         }
       }
     },
 
     viewResults() {
       this.$router.push({
-        name: "result",
-        params: { id: this.$store.getters["getRoomId"] }
+        name: 'result',
+        params: { id: this.$store.getters['getRoomId'] }
       });
     },
 
@@ -215,24 +290,24 @@ export default {
     },
 
     onFirstSelectionDone(id) {
-      this.$store.dispatch("socket_save_result", {
+      this.$store.dispatch('socket_save_result', {
         time: this.actualTime,
-        type: "init",
+        type: 'init',
         id: id
       });
     },
 
     stopPlayTimer() {
-      this.$store.dispatch("socket_start_counter");
+      this.$store.dispatch('socket_start_counter');
 
       if (this.currentDate == 0) {
         this.actualTime = 0;
-        this.$store.dispatch("socket_init_round");
+        this.$store.dispatch('socket_init_round');
       }
     },
 
     createAutoPlayers() {
-      this.$store.dispatch("socket_create_auto_players");
+      this.$store.dispatch('socket_create_auto_players');
     }
   },
   components: {
@@ -243,7 +318,7 @@ export default {
     ModalMessage
   },
   beforeCreate() {
-    this.$store.dispatch("get_room_by_id", this.$route.params.id);
+    this.$store.dispatch('get_room_by_id', this.$route.params.id);
   }
 };
 </script>
@@ -253,18 +328,35 @@ export default {
 .btn-primary:hover,
 .btn-primary:active,
 .btn-primary:focus {
-  border-color: #00a99d !important;
+  border-color: #17598a !important;
   box-shadow: none !important;
+  background-color: #17598a !important;
+  opacity: 1;
+  font-weight: 600;
 }
 .timer {
-  background-color: #00a99d !important;
+  background-color: #17598a !important;
 }
 
 .magic-link,
 .magic-link:focus,
 .magic-link:active,
 .magic-link:hover {
-  background-color: #baece9 !important;
-  color: #303133 !important;
+  background-color: #00c16e !important;
+  color: #fff !important;
+  font-family: 'Manrope', sans-serif;
+  font-weight: 700;
+  border: #00c16e !important;
+}
+
+.text-round,
+.text-round-title {
+  font-family: 'Manrope', sans-serif;
+  color: #000;
+  font-weight: 400;
+}
+
+.text-round-title {
+  font-weight: 600;
 }
 </style>
