@@ -15,8 +15,13 @@
               <a :href="`/room/${room.id}`" target="_blank">{{ room.id }}</a>
 
               <small class="ml-2"
-                >Creada por {{ room.players[0].name }} hace
-                {{ room.createdAt | timeSince }}</small
+                >Creada por
+                {{
+                  room.players[0] && room.players[0].name
+                    ? room.players[0].name
+                    : 'desconocido'
+                }}
+                hace {{ room.createdAt | timeSince }}</small
               >
             </div>
             <div class="float-right">
